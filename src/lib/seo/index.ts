@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getPublicSeoForRoute, getPublicSiteData } from '@/lib/db';
 
-const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+const SITE_BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://jazmain.vercel.app';
 
 export async function buildRouteMetadata(
   routeKey: string,

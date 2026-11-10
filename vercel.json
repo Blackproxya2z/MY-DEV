@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "name": "jazmain",
   "framework": "nextjs",
   "regions": ["sin1"],
   "headers": [
@@ -31,4 +32,3 @@
     }
   ]
 }
-
