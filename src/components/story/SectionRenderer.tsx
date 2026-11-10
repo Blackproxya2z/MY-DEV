@@ -119,7 +119,26 @@ export function SectionRenderer({
                   profile.hero_image_url ||
                   profile.avatar_url
                 }
+                bgImageUrl={(section.content_jsonb?.bg_image_url as string) || null}
                 heroVideoUrl={(section.content_jsonb?.hero_video_url as string) || null}
+                customActs={[
+                  {
+                    title: section.content_jsonb?.act_1_title as string,
+                    caption: section.content_jsonb?.act_1_caption as string,
+                  },
+                  {
+                    title: section.content_jsonb?.act_2_title as string,
+                    caption: section.content_jsonb?.act_2_caption as string,
+                  },
+                  {
+                    title: section.content_jsonb?.act_3_title as string,
+                    caption: section.content_jsonb?.act_3_caption as string,
+                  },
+                  {
+                    title: section.content_jsonb?.act_4_title as string,
+                    caption: section.content_jsonb?.act_4_caption as string,
+                  },
+                ]}
                 ownerName={profile.full_name}
                 ownerRole={profile.role_title}
                 enable3D={settings.enable_3d_hero}
@@ -203,11 +222,12 @@ export function SectionRenderer({
                       <div className="p-5 rounded-2xl border border-border bg-raised/50 space-y-2">
                         <span className="text-xs font-mono text-accent">01 // VISUAL STORY</span>
                         <h3 className="text-base font-semibold text-fg">
-                          Brand Identity &amp; Graphic Systems
+                          {(section.content_jsonb?.pillar_1_title as string) ||
+                            'Brand Identity & Graphic Systems'}
                         </h3>
                         <p className="text-sm text-muted">
-                          Logos, social media systems, covers, and presentations designed with
-                          editorial restraint and purpose.
+                          {(section.content_jsonb?.pillar_1_desc as string) ||
+                            'Logos, social media systems, covers, and presentations designed with editorial restraint and purpose.'}
                         </p>
                       </div>
                       <div className="p-5 rounded-2xl border border-border bg-raised/50 space-y-2">
@@ -215,11 +235,12 @@ export function SectionRenderer({
                           02 // DIGITAL EXPERIENCE
                         </span>
                         <h3 className="text-base font-semibold text-fg">
-                          Websites &amp; Business Setup
+                          {(section.content_jsonb?.pillar_2_title as string) ||
+                            'Websites & Business Setup'}
                         </h3>
                         <p className="text-sm text-muted">
-                          Responsive websites, Shopify setups, optimized business pages, and LinkedIn
-                          authority profiles.
+                          {(section.content_jsonb?.pillar_2_desc as string) ||
+                            'Responsive websites, Shopify setups, optimized business pages, and LinkedIn authority profiles.'}
                         </p>
                       </div>
                     </div>
@@ -235,6 +256,18 @@ export function SectionRenderer({
                     </div>
                   </div>
                 </div>
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  imageUrl={section.content_jsonb?.image_url as string}
+                  imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={
+                    (section.content_jsonb?.python_title as string) || section.label
+                  }
+                />
               </div>
             </section>
           );
@@ -348,10 +381,32 @@ export function SectionRenderer({
                 </div>
 
                 {/* Mid-Journey 10K Interactive Moment: Scope Architect */}
-                <InteractiveScopeBuilder
-                  services={services}
-                  ownerName={profile.full_name}
-                  whatsappNormalized={profile.whatsapp_normalized}
+                {section.content_jsonb?.show_scope_builder !== false ? (
+                  <InteractiveScopeBuilder
+                    services={services}
+                    ownerName={profile.full_name}
+                    whatsappNormalized={profile.whatsapp_normalized}
+                    heading={
+                      (section.content_jsonb?.scope_heading as string) ||
+                      'Assemble Your Custom Creative & Digital Scope'
+                    }
+                    subheading={
+                      (section.content_jsonb?.scope_subheading as string) ||
+                      'Click the capabilities you need below to preview deliverables and launch a tailored brief in one click.'
+                    }
+                  />
+                ) : null}
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  imageUrl={section.content_jsonb?.image_url as string}
+                  imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={
+                    (section.content_jsonb?.python_title as string) || section.label
+                  }
                 />
               </div>
             </section>
@@ -404,6 +459,18 @@ export function SectionRenderer({
                   enableDesktopRail={Boolean(
                     section.settings_jsonb?.enable_desktop_rail ?? true
                   )}
+                />
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  imageUrl={section.content_jsonb?.image_url as string}
+                  imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={
+                    (section.content_jsonb?.python_title as string) || section.label
+                  }
                 />
               </div>
             </section>
@@ -497,6 +564,18 @@ export function SectionRenderer({
                     );
                   })}
                 </div>
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  imageUrl={section.content_jsonb?.image_url as string}
+                  imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={
+                    (section.content_jsonb?.python_title as string) || section.label
+                  }
+                />
               </div>
             </section>
           );
@@ -618,6 +697,18 @@ export function SectionRenderer({
                     </div>
                   </div>
                 </div>
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  imageUrl={section.content_jsonb?.image_url as string}
+                  imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={
+                    (section.content_jsonb?.python_title as string) || section.label
+                  }
+                />
               </div>
             </section>
           );
@@ -746,6 +837,18 @@ export function SectionRenderer({
                     </div>
                   </div>
                 ) : null}
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  imageUrl={section.content_jsonb?.image_url as string}
+                  imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={
+                    (section.content_jsonb?.python_title as string) || section.label
+                  }
+                />
               </div>
             </section>
           );
@@ -828,6 +931,18 @@ export function SectionRenderer({
                     />
                   </div>
                 </div>
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  imageUrl={section.content_jsonb?.image_url as string}
+                  imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={
+                    (section.content_jsonb?.python_title as string) || section.label
+                  }
+                />
               </div>
             </section>
           );

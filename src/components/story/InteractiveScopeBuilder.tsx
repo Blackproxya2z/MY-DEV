@@ -10,10 +10,14 @@ export function InteractiveScopeBuilder({
   services,
   whatsappNormalized,
   ownerName,
+  heading = 'Assemble Your Custom Creative & Digital Scope',
+  subheading = 'Click the capabilities you need below to preview deliverables and launch a tailored brief in one click.',
 }: {
   services: Service[];
   whatsappNormalized: string;
   ownerName: string;
+  heading?: string;
+  subheading?: string;
 }) {
   const [selectedIds, setSelectedIds] = useState<string[]>(
     services.slice(0, 2).map((s) => s.id)
@@ -59,11 +63,10 @@ export function InteractiveScopeBuilder({
             <span>INTERACTIVE PROJECT ARCHITECT // CONFIGURE YOUR BUILD</span>
           </span>
           <h3 className="text-xl sm:text-2xl font-display font-semibold text-fg">
-            Assemble Your Custom Creative &amp; Digital Scope
+            {heading}
           </h3>
           <p className="text-xs sm:text-sm text-muted">
-            Click the capabilities you need below to preview deliverables and launch a tailored
-            brief in one click.
+            {subheading}
           </p>
         </div>
 

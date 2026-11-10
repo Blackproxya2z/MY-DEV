@@ -253,8 +253,9 @@ test.describe('Jahin Azmain — The Creative Odyssey (Full-Stack E2E Proof Suite
     await page.getByRole('button', { name: /Save & Publish Profile/i }).click();
     await expect(page.getByTestId('cms-status-toast')).toContainText('Public profile updated');
 
-    // 3. In Site Editor, add Custom HTML + Interactive Python 3 Code to Hero Section & publish
+    // 3. In Site Editor, customize 10K Hero Act 01 title + add Custom HTML + Interactive Python 3 Code & publish
     await page.click('[data-testid="cms-tab-site-editor"]');
+    await page.fill('[data-testid="hero-act1-title-input"]', 'JAHIN SIGNATURE SPARK');
     await page.fill(
       '[data-testid="section-custom-html-input"]',
       '<div id="wp-custom-banner">Custom WordPress-Style HTML Block Active</div>'
@@ -273,8 +274,9 @@ test.describe('Jahin Azmain — The Creative Odyssey (Full-Stack E2E Proof Suite
     await page.click('[data-testid="save-theme-settings-btn"]');
     await expect(page.getByTestId('cms-status-toast')).toContainText('Theme customizer');
 
-    // 5. Visit Public Homepage (/) and verify JPG Portrait, Custom HTML, and Live Python 3 Execution!
+    // 5. Visit Public Homepage (/) and verify custom 10K Act title, JPG Portrait, Custom HTML, and Live Python 3 Execution!
     await page.goto('/');
+    await expect(page.getByText('JAHIN SIGNATURE SPARK')).toBeVisible();
     await expect(page.getByTestId('hero-portrait-img')).toBeVisible();
     await expect(page.locator('#wp-custom-banner')).toContainText(
       'Custom WordPress-Style HTML Block Active'

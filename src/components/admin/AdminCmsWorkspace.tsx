@@ -3183,6 +3183,112 @@ function SectionInspectorForm({
   const [primaryCtaLabel, setPrimaryCtaLabel] = useState(
     String(section.content_jsonb?.primary_cta_label || 'Explore My Work')
   );
+  const [primaryCtaHref, setPrimaryCtaHref] = useState(
+    String(section.content_jsonb?.primary_cta_href || '#chapter-worlds')
+  );
+  const [secondaryCtaLabel, setSecondaryCtaLabel] = useState(
+    String(section.content_jsonb?.secondary_cta_label || "Let's Work Together")
+  );
+  const [secondaryCtaHref, setSecondaryCtaHref] = useState(
+    String(section.content_jsonb?.secondary_cta_href || '/contact')
+  );
+  const [tertiaryCtaLabel, setTertiaryCtaLabel] = useState(
+    String(section.content_jsonb?.tertiary_cta_label || 'Download Resume')
+  );
+  const [sparkCaption, setSparkCaption] = useState(
+    String(section.content_jsonb?.spark_caption || 'IDEA SPARK // PAPER TO PIXEL')
+  );
+  const [heroVideoUrl, setHeroVideoUrl] = useState(
+    String(section.content_jsonb?.hero_video_url || '')
+  );
+  const [bgImageUrl, setBgImageUrl] = useState(
+    String(section.content_jsonb?.bg_image_url || '')
+  );
+  const [act1Title, setAct1Title] = useState(
+    String(section.content_jsonb?.act_1_title || 'THE IDEA SPARK')
+  );
+  const [act1Caption, setAct1Caption] = useState(
+    String(
+      section.content_jsonb?.act_1_caption ||
+        'Every iconic brand and digital product begins as an intentional spark of geometry and narrative focus.'
+    )
+  );
+  const [act2Title, setAct2Title] = useState(
+    String(section.content_jsonb?.act_2_title || 'PAPER TO PIXEL ARCHITECTURE')
+  );
+  const [act2Caption, setAct2Caption] = useState(
+    String(
+      section.content_jsonb?.act_2_caption ||
+        'Editorial typography, grid proportions, and brand identity systems lock into a unified visual language.'
+    )
+  );
+  const [act3Title, setAct3Title] = useState(
+    String(section.content_jsonb?.act_3_title || 'INTERACTIVE DIGITAL WORLDS')
+  );
+  const [act3Caption, setAct3Caption] = useState(
+    String(
+      section.content_jsonb?.act_3_caption ||
+        'Full-stack web engineering, responsive motion, and conversion-focused platforms come alive at 60fps.'
+    )
+  );
+  const [act4Title, setAct4Title] = useState(
+    String(section.content_jsonb?.act_4_title || 'COMPOSED HORIZON SETTLE')
+  );
+  const [act4Caption, setAct4Caption] = useState(
+    String(
+      section.content_jsonb?.act_4_caption ||
+        'Design clarity and technical craft converge into a lasting digital presence built for growth.'
+    )
+  );
+
+  // Editorial Intro (Chapter 02) custom fields
+  const [narrativeText, setNarrativeText] = useState(
+    Array.isArray(section.content_jsonb?.narrative_paragraphs)
+      ? (section.content_jsonb.narrative_paragraphs as string[]).join('\n\n')
+      : ''
+  );
+  const [pillar1Title, setPillar1Title] = useState(
+    String(section.content_jsonb?.pillar_1_title || 'Brand Identity & Graphic Systems')
+  );
+  const [pillar1Desc, setPillar1Desc] = useState(
+    String(
+      section.content_jsonb?.pillar_1_desc ||
+        'Logos, social media systems, covers, and presentations designed with editorial restraint and purpose.'
+    )
+  );
+  const [pillar2Title, setPillar2Title] = useState(
+    String(section.content_jsonb?.pillar_2_title || 'Websites & Business Setup')
+  );
+  const [pillar2Desc, setPillar2Desc] = useState(
+    String(
+      section.content_jsonb?.pillar_2_desc ||
+        'Responsive websites, Shopify setups, optimized business pages, and LinkedIn authority profiles.'
+    )
+  );
+  const [storyCtaLabel, setStoryCtaLabel] = useState(
+    String(section.content_jsonb?.cta_label || 'Read Full Story & Philosophy')
+  );
+  const [storyCtaHref, setStoryCtaHref] = useState(
+    String(section.content_jsonb?.cta_href || '/about')
+  );
+
+  // Services Grid (Chapter 03) Interactive Scope Builder fields
+  const [showScopeBuilder, setShowScopeBuilder] = useState(
+    section.content_jsonb?.show_scope_builder !== false
+  );
+  const [scopeHeading, setScopeHeading] = useState(
+    String(
+      section.content_jsonb?.scope_heading ||
+        'Assemble Your Custom Creative & Digital Scope'
+    )
+  );
+  const [scopeSubheading, setScopeSubheading] = useState(
+    String(
+      section.content_jsonb?.scope_subheading ||
+        'Click the capabilities you need below to preview deliverables and launch a tailored brief in one click.'
+    )
+  );
+
   const [imageUrl, setImageUrl] = useState(
     String(section.content_jsonb?.image_url || '')
   );
@@ -3263,15 +3369,271 @@ function SectionInspectorForm({
       </div>
 
       {section.type === 'hero' ? (
-        <div className="space-y-1">
-          <label className="text-xs font-mono text-muted">Primary Hero CTA Label</label>
-          <input
-            type="text"
-            data-testid="hero-cta-label-input"
-            value={primaryCtaLabel}
-            onChange={(e) => setPrimaryCtaLabel(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
+        <div className="rounded-xl border border-border bg-canvas/70 p-4 space-y-4">
+          <span className="text-xs font-mono uppercase tracking-wider text-accent block">
+            10K Cinematic Hero Controls (CTAs, Scroll Video, Background JPG &amp; 4 Story Acts)
+          </span>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Primary Hero CTA Label</label>
+              <input
+                type="text"
+                data-testid="hero-cta-label-input"
+                value={primaryCtaLabel}
+                onChange={(e) => setPrimaryCtaLabel(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Primary Hero CTA Link</label>
+              <input
+                type="text"
+                value={primaryCtaHref}
+                onChange={(e) => setPrimaryCtaHref(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg font-mono"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Secondary CTA Label</label>
+              <input
+                type="text"
+                value={secondaryCtaLabel}
+                onChange={(e) => setSecondaryCtaLabel(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Secondary CTA Link</label>
+              <input
+                type="text"
+                value={secondaryCtaHref}
+                onChange={(e) => setSecondaryCtaHref(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg font-mono"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Tertiary CTA Label</label>
+              <input
+                type="text"
+                value={tertiaryCtaLabel}
+                onChange={(e) => setTertiaryCtaLabel(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Cinema HUD Caption</label>
+              <input
+                type="text"
+                value={sparkCaption}
+                onChange={(e) => setSparkCaption(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg font-mono"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[11px] font-mono text-muted">
+              Optional Scroll-Scrubbing Hero Video URL (.mp4 / .webm)
+            </label>
+            <input
+              type="text"
+              value={heroVideoUrl}
+              onChange={(e) => setHeroVideoUrl(e.target.value)}
+              placeholder="https://.../hero-scrub.mp4 (Leave empty to use built-in 60fps 3D Cinema Engine)"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg font-mono"
+            />
+          </div>
+
+          <MediaImageField
+            label="Full-Bleed Hero Background .JPG Wallpaper (Optional)"
+            value={bgImageUrl}
+            onChangeUrl={setBgImageUrl}
+            mediaAssets={mediaAssets}
+            onUploadAsset={onUploadAsset}
+            testIdPrefix="hero-bg-image"
+            helperText="Upload a full-screen .JPG background behind the 3D Cinema stage."
           />
+
+          <div className="pt-2 border-t border-border/60 space-y-3">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-highlight block">
+              4 Choreographed Scroll Story Acts (Scrubber Dock Captions)
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="p-3 rounded-lg border border-border bg-raised/60 space-y-1.5">
+                <label className="text-[10px] font-mono text-accent">ACT 01 Title &amp; Caption</label>
+                <input
+                  type="text"
+                  data-testid="hero-act1-title-input"
+                  value={act1Title}
+                  onChange={(e) => setAct1Title(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg font-mono"
+                />
+                <textarea
+                  rows={2}
+                  data-testid="hero-act1-caption-input"
+                  value={act1Caption}
+                  onChange={(e) => setAct1Caption(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg"
+                />
+              </div>
+              <div className="p-3 rounded-lg border border-border bg-raised/60 space-y-1.5">
+                <label className="text-[10px] font-mono text-accent">ACT 02 Title &amp; Caption</label>
+                <input
+                  type="text"
+                  value={act2Title}
+                  onChange={(e) => setAct2Title(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg font-mono"
+                />
+                <textarea
+                  rows={2}
+                  value={act2Caption}
+                  onChange={(e) => setAct2Caption(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg"
+                />
+              </div>
+              <div className="p-3 rounded-lg border border-border bg-raised/60 space-y-1.5">
+                <label className="text-[10px] font-mono text-accent">ACT 03 Title &amp; Caption</label>
+                <input
+                  type="text"
+                  value={act3Title}
+                  onChange={(e) => setAct3Title(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg font-mono"
+                />
+                <textarea
+                  rows={2}
+                  value={act3Caption}
+                  onChange={(e) => setAct3Caption(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg"
+                />
+              </div>
+              <div className="p-3 rounded-lg border border-border bg-raised/60 space-y-1.5">
+                <label className="text-[10px] font-mono text-accent">ACT 04 Title &amp; Caption</label>
+                <input
+                  type="text"
+                  value={act4Title}
+                  onChange={(e) => setAct4Title(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg font-mono"
+                />
+                <textarea
+                  rows={2}
+                  value={act4Caption}
+                  onChange={(e) => setAct4Caption(e.target.value)}
+                  className="w-full px-2.5 py-1.5 rounded border border-border bg-canvas text-xs text-fg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {section.type === 'editorial-intro' ? (
+        <div className="rounded-xl border border-border bg-canvas/70 p-4 space-y-4">
+          <span className="text-xs font-mono uppercase tracking-wider text-accent block">
+            Story Narrative &amp; Capability Pillars (Chapter 02 Controls)
+          </span>
+          <div className="space-y-1">
+            <label className="text-[11px] font-mono text-muted">
+              Narrative Paragraphs (Separate paragraphs with a blank line)
+            </label>
+            <textarea
+              rows={4}
+              value={narrativeText}
+              onChange={(e) => setNarrativeText(e.target.value)}
+              placeholder="Write your main story paragraphs here..."
+              className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg"
+            />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-mono text-accent">Pillar 01 Title &amp; Copy</label>
+              <input
+                type="text"
+                value={pillar1Title}
+                onChange={(e) => setPillar1Title(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+              <textarea
+                rows={2}
+                value={pillar1Desc}
+                onChange={(e) => setPillar1Desc(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-mono text-highlight">Pillar 02 Title &amp; Copy</label>
+              <input
+                type="text"
+                value={pillar2Title}
+                onChange={(e) => setPillar2Title(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+              <textarea
+                rows={2}
+                value={pillar2Desc}
+                onChange={(e) => setPillar2Desc(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Story CTA Button Label</label>
+              <input
+                type="text"
+                value={storyCtaLabel}
+                onChange={(e) => setStoryCtaLabel(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Story CTA Button Link</label>
+              <input
+                type="text"
+                value={storyCtaHref}
+                onChange={(e) => setStoryCtaHref(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg font-mono"
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {section.type === 'services-grid' ? (
+        <div className="rounded-xl border border-border bg-canvas/70 p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-accent">
+              Interactive Project Scope Architect (10K Mid-Journey Builder)
+            </span>
+            <label className="flex items-center gap-2 text-xs font-mono text-fg">
+              <input
+                type="checkbox"
+                checked={showScopeBuilder}
+                onChange={(e) => setShowScopeBuilder(e.target.checked)}
+              />
+              <span>Show Scope Builder</span>
+            </label>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Scope Builder Heading</label>
+              <input
+                type="text"
+                value={scopeHeading}
+                onChange={(e) => setScopeHeading(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono text-muted">Scope Builder Subheading</label>
+              <input
+                type="text"
+                value={scopeSubheading}
+                onChange={(e) => setScopeSubheading(e.target.value)}
+                className="w-full px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs text-fg"
+              />
+            </div>
+          </div>
         </div>
       ) : null}
 
@@ -3392,7 +3754,47 @@ function SectionInspectorForm({
               is_enabled: isEnabled,
               content_jsonb: {
                 ...section.content_jsonb,
-                ...(section.type === 'hero' ? { primary_cta_label: primaryCtaLabel } : {}),
+                ...(section.type === 'hero'
+                  ? {
+                      primary_cta_label: primaryCtaLabel,
+                      primary_cta_href: primaryCtaHref,
+                      secondary_cta_label: secondaryCtaLabel,
+                      secondary_cta_href: secondaryCtaHref,
+                      tertiary_cta_label: tertiaryCtaLabel,
+                      spark_caption: sparkCaption,
+                      hero_video_url: heroVideoUrl.trim(),
+                      bg_image_url: bgImageUrl.trim(),
+                      act_1_title: act1Title,
+                      act_1_caption: act1Caption,
+                      act_2_title: act2Title,
+                      act_2_caption: act2Caption,
+                      act_3_title: act3Title,
+                      act_3_caption: act3Caption,
+                      act_4_title: act4Title,
+                      act_4_caption: act4Caption,
+                    }
+                  : {}),
+                ...(section.type === 'editorial-intro'
+                  ? {
+                      narrative_paragraphs: narrativeText
+                        .split(/\n\s*\n/)
+                        .map((p) => p.trim())
+                        .filter(Boolean),
+                      pillar_1_title: pillar1Title,
+                      pillar_1_desc: pillar1Desc,
+                      pillar_2_title: pillar2Title,
+                      pillar_2_desc: pillar2Desc,
+                      cta_label: storyCtaLabel,
+                      cta_href: storyCtaHref,
+                    }
+                  : {}),
+                ...(section.type === 'services-grid'
+                  ? {
+                      show_scope_builder: showScopeBuilder,
+                      scope_heading: scopeHeading,
+                      scope_subheading: scopeSubheading,
+                    }
+                  : {}),
                 image_url: imageUrl.trim(),
                 image_alt: imageAlt.trim(),
                 custom_html: customHtml,

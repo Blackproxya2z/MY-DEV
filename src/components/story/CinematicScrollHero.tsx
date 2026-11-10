@@ -14,6 +14,11 @@ import {
 } from 'lucide-react';
 import { useOdysseyExperience } from '@/lib/motion';
 
+export interface CustomCinemaActInput {
+  title?: string;
+  caption?: string;
+}
+
 export interface CinematicScrollHeroProps {
   chapterIdx: string;
   eyebrow: string;
@@ -30,7 +35,9 @@ export interface CinematicScrollHeroProps {
   resumeUrl?: string | null;
   sparkCaption: string;
   portraitUrl?: string | null;
+  bgImageUrl?: string | null;
   heroVideoUrl?: string | null;
+  customActs?: CustomCinemaActInput[];
   ownerName: string;
   ownerRole: string;
   enable3D?: boolean;
@@ -110,7 +117,9 @@ export function CinematicScrollHero({
   resumeUrl,
   sparkCaption,
   portraitUrl,
+  bgImageUrl,
   heroVideoUrl,
+  customActs,
   ownerName,
   ownerRole,
   enable3D = true,
@@ -118,6 +127,14 @@ export function CinematicScrollHero({
   isPreviewMode = false,
   children,
 }: CinematicScrollHeroProps) {
+  const resolvedActs: CinemaAct[] = CINEMA_ACTS.map((defaultAct, idx) => {
+    const override = customActs?.[idx];
+    return {
+      ...defaultAct,
+      title: override?.title?.trim() ? override.title.trim() : defaultAct.title,
+      caption: override?.caption?.trim() ? override.caption.trim() : defaultAct.caption,
+    };
+  });
   const { effectiveMotion, themeMode } = useOdysseyExperience();
   const runwayRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -491,9 +508,9 @@ export function CinematicScrollHero({
   }, [effectiveMotion, themeMode]);
 
   const activeAct =
-    CINEMA_ACTS.find(
+    resolvedActs.find(
       (act) => uiProgress >= act.range[0] && uiProgress <= act.range[1]
-    ) || CINEMA_ACTS[0];
+    ) || resolvedActs[0];
 
   const handleSelectAct = (act: CinemaAct) => {
     const midProgress = (act.range[0] + Math.min(1, act.range[1])) / 2;
@@ -527,8 +544,17 @@ export function CinematicScrollHero({
           pointerRef.current = { x: 0, y: 0 };
         }}
       >
-        {/* FULL-BLEED 100SVH BACKGROUND VIDEO & 60FPS 3D CINEMA STAGE */}
+        {/* FULL-BLEED 100SVH BACKGROUND IMAGE / VIDEO & 60FPS 3D CINEMA STAGE */}
         <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+          {bgImageUrl ? (
+            <img
+              src={bgImageUrl}
+              alt=""
+              data-testid="hero-bg-image"
+              className="absolute inset-0 w-full h-full object-cover opacity-35"
+            />
+          ) : null}
+
           {heroVideoUrl ? (
             <video
               ref={videoRef}
@@ -699,7 +725,7 @@ export function CinematicScrollHero({
                     {activeAct.title}
                   </span>
                   <div className="flex items-center gap-1">
-                    {CINEMA_ACTS.map((act, index) => {
+                    {resolvedActs.map((act, index) => {
                       const isCurrent = act.id === activeAct.id;
                       return (
                         <button
