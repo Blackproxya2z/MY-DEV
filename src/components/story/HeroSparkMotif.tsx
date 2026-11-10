@@ -183,14 +183,20 @@ export function HeroSparkMotif({
         </g>
       </svg>
 
-      {/* Optional Owner Portrait Cutout Badge if uploaded via Admin */}
+      {/* Owner Portrait Frame when uploaded via Admin CMS */}
       {portraitUrl ? (
-        <div className="absolute bottom-6 right-6 z-20 w-24 h-24 rounded-2xl overflow-hidden border border-border bg-raised shadow-lg">
+        <div className="absolute inset-12 sm:inset-14 z-20 rounded-3xl overflow-hidden border-2 border-accent/70 bg-raised/90 shadow-2xl flex items-center justify-center group">
           <img
             src={portraitUrl}
             alt={`${ownerName} portrait`}
-            className="w-full h-full object-cover"
+            data-testid="hero-portrait-img"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-canvas/90 via-canvas/40 to-transparent p-3 text-center">
+            <span className="text-xs font-mono text-fg font-semibold tracking-wider">
+              {ownerName}
+            </span>
+          </div>
         </div>
       ) : null}
 

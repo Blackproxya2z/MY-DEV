@@ -78,6 +78,16 @@ export default async function ServiceDetailPage({
               {service.description}
             </p>
 
+            {service.cover_url ? (
+              <div className="rounded-card overflow-hidden border border-border aspect-[16/9] max-w-2xl">
+                <img
+                  src={service.cover_url}
+                  alt={service.cover_alt || service.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : null}
+
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <a
                 href="#service-inquiry"

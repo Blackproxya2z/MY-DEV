@@ -521,6 +521,81 @@ export async function upsertAdminPageSection(
   });
 }
 
+export async function deleteAdminPageSection(
+  sectionId: string,
+  actorEmail = 'azmain56@gmail.com'
+): Promise<void> {
+  return mutateDbState((state) => {
+    const target = state.page_sections.find((s) => s.id === sectionId);
+    state.page_sections = state.page_sections.filter((s) => s.id !== sectionId);
+    state.page_sections.forEach((sec, idx) => {
+      sec.sort_order = idx + 1;
+    });
+    if (target) {
+      appendAuditLog(state, {
+        actorEmail,
+        action: 'SECTION_DELETED',
+        entityType: 'page_section',
+        entityId: sectionId,
+        entityLabel: target.label,
+      });
+    }
+  });
+}
+
+export async function addAdminProjectImage(
+  input: {
+    project_id: string;
+    url: string;
+    alt_text: string;
+    caption?: string;
+    media_id?: string | null;
+  },
+  actorEmail = 'azmain56@gmail.com'
+): Promise<ProjectImage> {
+  return mutateDbState((state) => {
+    const now = new Date().toISOString();
+    const existingForProject = state.project_images.filter(
+      (img) => img.project_id === input.project_id
+    );
+    const created: ProjectImage = {
+      id: `pimg-${crypto.randomUUID().slice(0, 8)}`,
+      project_id: input.project_id,
+      media_id: input.media_id || null,
+      url: input.url,
+      alt_text: input.alt_text || 'Project gallery image',
+      caption: input.caption || '',
+      sort_order: existingForProject.length + 1,
+      created_at: now,
+    };
+    state.project_images.push(created);
+    appendAuditLog(state, {
+      actorEmail,
+      action: 'PROJECT_IMAGE_ADDED',
+      entityType: 'project_image',
+      entityId: created.id,
+      entityLabel: created.alt_text,
+    });
+    return created;
+  });
+}
+
+export async function deleteAdminProjectImage(
+  id: string,
+  actorEmail = 'azmain56@gmail.com'
+): Promise<void> {
+  return mutateDbState((state) => {
+    state.project_images = state.project_images.filter((img) => img.id !== id);
+    appendAuditLog(state, {
+      actorEmail,
+      action: 'PROJECT_IMAGE_DELETED',
+      entityType: 'project_image',
+      entityId: id,
+      entityLabel: id,
+    });
+  });
+}
+
 export async function reorderAdminPageSections(
   orderedIds: string[],
   actorEmail = 'azmain56@gmail.com'

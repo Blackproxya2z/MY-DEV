@@ -53,6 +53,10 @@ import { useOdysseyExperience } from '@/lib/motion';
 import { formatDateReadable, slugify } from '@/lib/utils';
 import { SectionRenderer } from '@/components/story/SectionRenderer';
 import { TiptapArticleEditor } from '@/components/admin/TiptapArticleEditor';
+import {
+  MediaImageField,
+  compressImageFileToJpgDataUrl,
+} from '@/components/admin/MediaImageField';
 
 export type AdminModuleKey =
   | 'overview'
@@ -257,15 +261,24 @@ export function AdminCmsWorkspace({
     }, 5000);
   };
 
-  const refreshCmsState = async () => {
+  const refreshCmsState = async (triggerAction?: string) => {
     const res = await fetch('/api/admin/cms', { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
       if (data.state) {
         setDbState(data.state);
-        setProfileDraft(data.state.profiles[0]);
-        setSettingsDraft(data.state.site_settings[0]);
-        if (data.state.education[0]) setEduDraft(data.state.education[0]);
+        if (triggerAction === 'update_profile' || triggerAction === 'restore_revision') {
+          setProfileDraft(data.state.profiles[0]);
+        }
+        if (triggerAction === 'update_settings' || triggerAction === 'restore_revision') {
+          setSettingsDraft(data.state.site_settings[0]);
+        }
+        if (
+          (triggerAction === 'upsert_education' || triggerAction === 'restore_revision') &&
+          data.state.education[0]
+        ) {
+          setEduDraft(data.state.education[0]);
+        }
       }
     }
   };
@@ -287,7 +300,7 @@ export function AdminCmsWorkspace({
         notify('error', data.error || 'Operation failed');
         return null;
       }
-      await refreshCmsState();
+      await refreshCmsState(action);
       notify('success', successMsg);
       return data.record || data.result || true;
     } catch {
@@ -308,22 +321,18 @@ export function AdminCmsWorkspace({
     router.refresh();
   };
 
-  const handleFileInputToDataUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileInputToDataUrl = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = String(reader.result || '');
-      setMediaForm({
-        filename: file.name,
-        public_url: dataUrl,
-        mime_type: file.type || 'image/png',
-        size_bytes: file.size || 1024,
-        alt_text: file.name.replace(/\.[^.]+$/, ''),
-        caption: 'Uploaded via Admin Media Library',
-      });
-    };
-    reader.readAsDataURL(file);
+    const optimized = await compressImageFileToJpgDataUrl(file);
+    setMediaForm({
+      filename: optimized.filename,
+      public_url: optimized.dataUrl,
+      mime_type: optimized.mimeType,
+      size_bytes: optimized.sizeBytes,
+      alt_text: file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '),
+      caption: 'Uploaded via Admin Media Library',
+    });
   };
 
   const unreadInboxCount = dbState.contact_messages.filter(
@@ -632,7 +641,51 @@ export function AdminCmsWorkspace({
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    data-testid="add-custom-section-btn"
+                    onClick={async () => {
+                      const newId = `sec-custom-${Date.now()}`;
+                      const created = await dispatchCmsMutation(
+                        'upsert_section',
+                        {
+                          id: newId,
+                          page_key: 'home',
+                          section_key: `chapter-custom-${dbState.page_sections.length + 1}`,
+                          type: 'custom-code',
+                          chapter_code: `${String(dbState.page_sections.length + 1).padStart(2, '0')} / ${String(dbState.page_sections.length + 1).padStart(2, '0')}`,
+                          label: 'Custom Studio Block',
+                          eyebrow: 'CUSTOM HTML · PYTHON · VISUAL STUDIO',
+                          heading: 'Interactive Custom Studio & Visual Showcase',
+                          subheading:
+                            'Built directly from the Odyssey WordPress-style CMS with custom JPG visuals, HTML/CSS, and live Python 3 execution.',
+                          sort_order: dbState.page_sections.length + 1,
+                          is_enabled: true,
+                          status: 'published',
+                          content_jsonb: {
+                            image_url: '',
+                            image_alt: 'Custom section visual',
+                            custom_html:
+                              '<div class="p-4 rounded-xl border border-border bg-canvas/80 text-sm"><strong>Custom HTML Block:</strong> Edit this HTML or add Python code in the CMS Inspector!</div>',
+                            custom_css: '',
+                            python_title: 'Jahin Studio Python 3 App',
+                            python_code:
+                              'brand = "Jahin Azmain — Creative Odyssey"\nprojects = 6\nservices = 6\nprint(f"Welcome to {brand}")\nprint(f"Active Portfolio Worlds: {projects} | Core Disciplines: {services}")',
+                          },
+                        },
+                        'Created new Custom HTML / Python / Image section'
+                      );
+                      if (created) {
+                        setSelectedSectionId(newId);
+                      }
+                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-canvas font-semibold text-xs hover:opacity-95"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ Add Custom HTML / Python / JPG Section</span>
+                  </button>
+
                   <button
                     type="button"
                     data-testid="toggle-live-preview-btn"
@@ -724,6 +777,25 @@ export function AdminCmsWorkspace({
                             >
                               <ArrowDown className="w-3.5 h-3.5" />
                             </button>
+
+                            {sec.id.startsWith('sec-custom-') ? (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (window.confirm(`Delete custom section "${sec.label}"?`)) {
+                                    dispatchCmsMutation(
+                                      'delete_section',
+                                      { id: sec.id },
+                                      `Deleted section "${sec.label}"`
+                                    );
+                                  }
+                                }}
+                                className="p-1.5 rounded-lg border border-border bg-canvas text-rose-400 hover:border-rose-400"
+                                title="Delete custom section"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            ) : null}
                           </div>
                         </div>
                       );
@@ -735,6 +807,14 @@ export function AdminCmsWorkspace({
                   <SectionInspectorForm
                     key={selectedSection.id}
                     section={selectedSection}
+                    mediaAssets={dbState.media_assets}
+                    onUploadAsset={(asset) =>
+                      dispatchCmsMutation(
+                        'upload_media',
+                        asset,
+                        `Saved JPG "${asset.filename}" to Media Library`
+                      )
+                    }
                     onSave={(updated) =>
                       dispatchCmsMutation(
                         'upsert_section',
@@ -969,6 +1049,53 @@ export function AdminCmsWorkspace({
                   </div>
                 </div>
 
+                {/* WordPress-Style Portrait & Logo JPG Uploaders */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                  <MediaImageField
+                    label="Owner Portrait Photo (.JPG / .PNG)"
+                    value={profileDraft.avatar_url || ''}
+                    altValue={profileDraft.full_name}
+                    onChangeUrl={(url) =>
+                      setProfileDraft({
+                        ...profileDraft,
+                        avatar_url: url.trim() || null,
+                      })
+                    }
+                    mediaAssets={dbState.media_assets}
+                    onUploadAsset={(asset) =>
+                      dispatchCmsMutation(
+                        'upload_media',
+                        asset,
+                        `Uploaded portrait JPG "${asset.filename}"`
+                      )
+                    }
+                    testIdPrefix="profile-avatar"
+                    helperText="Displays in Hero & About sections."
+                  />
+
+                  <MediaImageField
+                    label="Custom Site Logo / Navbar Badge (.JPG / .PNG)"
+                    value={profileDraft.logo_url || ''}
+                    altValue={`${profileDraft.full_name} Logo`}
+                    onChangeUrl={(url) =>
+                      setProfileDraft({
+                        ...profileDraft,
+                        logo_url: url.trim() || null,
+                      })
+                    }
+                    mediaAssets={dbState.media_assets}
+                    onUploadAsset={(asset) =>
+                      dispatchCmsMutation(
+                        'upload_media',
+                        asset,
+                        `Uploaded logo JPG "${asset.filename}"`
+                      )
+                    }
+                    testIdPrefix="profile-logo"
+                    helperText="Replaces the JA monogram in the top navigation bar."
+                  />
+                </div>
+
                 <button
                   type="button"
                   onClick={() =>
@@ -1156,6 +1283,28 @@ export function AdminCmsWorkspace({
                       />
                     </div>
                   </div>
+
+                  <MediaImageField
+                    label="Service Cover Image (.JPG / .PNG)"
+                    value={editingService.cover_url || ''}
+                    altValue={editingService.cover_alt || editingService.title}
+                    onChangeUrl={(url) =>
+                      setEditingService({ ...editingService, cover_url: url })
+                    }
+                    onChangeAlt={(alt) =>
+                      setEditingService({ ...editingService, cover_alt: alt })
+                    }
+                    mediaAssets={dbState.media_assets}
+                    onUploadAsset={(asset) =>
+                      dispatchCmsMutation(
+                        'upload_media',
+                        asset,
+                        `Uploaded service image "${asset.filename}"`
+                      )
+                    }
+                    testIdPrefix="service-cover"
+                    helperText="Upload a .JPG photo for this service portal card."
+                  />
 
                   <div className="flex items-center gap-3 pt-2">
                     <button
@@ -1410,6 +1559,29 @@ export function AdminCmsWorkspace({
                     </div>
                   </div>
 
+                  {/* Project Cover JPG Upload + Media Library Picker */}
+                  <MediaImageField
+                    label="Project Case Study Cover Photo (.JPG / .PNG)"
+                    value={editingProject.cover_url || ''}
+                    altValue={editingProject.cover_alt || editingProject.title}
+                    onChangeUrl={(url) =>
+                      setEditingProject({ ...editingProject, cover_url: url })
+                    }
+                    onChangeAlt={(alt) =>
+                      setEditingProject({ ...editingProject, cover_alt: alt })
+                    }
+                    mediaAssets={dbState.media_assets}
+                    onUploadAsset={(asset) =>
+                      dispatchCmsMutation(
+                        'upload_media',
+                        asset,
+                        `Uploaded project cover JPG "${asset.filename}"`
+                      )
+                    }
+                    testIdPrefix="project-cover"
+                    helperText="Upload a real .JPG screenshot or cover photo from your computer."
+                  />
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-xs font-mono text-muted">Cover Image URL</label>
@@ -1420,7 +1592,7 @@ export function AdminCmsWorkspace({
                         onChange={(e) =>
                           setEditingProject({ ...editingProject, cover_url: e.target.value })
                         }
-                        placeholder="https://... or select from Media Library"
+                        placeholder="https://... or upload a .JPG above"
                         className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
                       />
                     </div>
@@ -1625,6 +1797,28 @@ export function AdminCmsWorkspace({
                       className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
                     />
                   </div>
+
+                  <MediaImageField
+                    label="Article Cover Photo (.JPG / .PNG)"
+                    value={editingPost.cover_url || ''}
+                    altValue={editingPost.cover_alt || editingPost.title}
+                    onChangeUrl={(url) =>
+                      setEditingPost({ ...editingPost, cover_url: url })
+                    }
+                    onChangeAlt={(alt) =>
+                      setEditingPost({ ...editingPost, cover_alt: alt })
+                    }
+                    mediaAssets={dbState.media_assets}
+                    onUploadAsset={(asset) =>
+                      dispatchCmsMutation(
+                        'upload_media',
+                        asset,
+                        `Uploaded article cover JPG "${asset.filename}"`
+                      )
+                    }
+                    testIdPrefix="blog-cover"
+                    helperText="Upload a .JPG cover photo for this journal article."
+                  />
 
                   <div className="space-y-1">
                     <label className="text-xs font-mono text-muted">
@@ -2190,16 +2384,27 @@ export function AdminCmsWorkspace({
                         key={asset.id}
                         className="p-4 rounded-xl border border-border bg-raised flex items-center justify-between gap-4"
                       >
-                        <div className="space-y-1 min-w-0">
-                          <strong className="text-sm font-semibold text-fg block truncate">
-                            {asset.filename}
-                          </strong>
-                          <span className="text-xs font-mono text-muted block truncate">
-                            Alt: {asset.alt_text} · {asset.mime_type}
-                          </span>
-                          <code className="text-[11px] font-mono text-accent block truncate">
-                            {asset.public_url}
-                          </code>
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          {asset.mime_type.startsWith('image/') ? (
+                            <div className="w-16 h-12 rounded-lg overflow-hidden border border-border bg-canvas shrink-0">
+                              <img
+                                src={asset.public_url}
+                                alt={asset.alt_text}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ) : null}
+                          <div className="space-y-1 min-w-0">
+                            <strong className="text-sm font-semibold text-fg block truncate">
+                              {asset.filename}
+                            </strong>
+                            <span className="text-xs font-mono text-muted block truncate">
+                              Alt: {asset.alt_text} · {asset.mime_type}
+                            </span>
+                            <code className="text-[11px] font-mono text-accent block truncate">
+                              {asset.public_url.slice(0, 80)}
+                            </code>
+                          </div>
                         </div>
                         <button
                           type="button"
@@ -2410,97 +2615,319 @@ export function AdminCmsWorkspace({
           ) : null}
 
           {/* ================================================================
-              15. THEME & APPEARANCE MODULE
+              15. THEME & APPEARANCE MODULE (WordPress-Style Visual Customizer)
              ================================================================ */}
           {activeTab === 'theme' ? (
-            <div className="max-w-2xl space-y-6">
+            <div className="max-w-4xl space-y-6">
               <div>
                 <h2 className="text-2xl font-display font-semibold text-fg">
-                  Theme, Palette &amp; Motion Intensity
+                  WordPress-Style Theme Customizer, Colors &amp; Global Code
                 </h2>
                 <p className="text-sm text-muted">
-                  Switch between Dark Cosmic Editorial and Minimalist Light, choose brand accent
-                  tokens, and set global motion intensity.
+                  Customize theme mode, brand color pickers, card border radius, 3D Hero Spark, and
+                  global Custom CSS / HTML injection across your entire website.
                 </p>
               </div>
 
-              <div className="rounded-card border border-border bg-raised p-6 space-y-5">
-                <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-muted">
-                    Default Theme Mode
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Left Column: Preset Theme, Accent, Motion & Geometry */}
+                <div className="lg:col-span-6 rounded-card border border-border bg-raised p-6 space-y-5">
+                  <h3 className="text-xs font-mono uppercase tracking-wider text-accent">
+                    1. Core Theme, Presets &amp; Motion
+                  </h3>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono uppercase tracking-wider text-muted">
+                      Default Theme Mode
+                    </label>
+                    <select
+                      data-testid="theme-mode-select"
+                      value={settingsDraft.theme_mode}
+                      onChange={(e) => {
+                        const mode = e.target.value as 'dark' | 'light';
+                        setSettingsDraft({ ...settingsDraft, theme_mode: mode });
+                        setThemeMode(mode);
+                      }}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
+                    >
+                      <option value="dark">Dark Cosmic Editorial (#0B0D14)</option>
+                      <option value="light">Minimalist Light Editorial (#F5F5F7)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono uppercase tracking-wider text-muted">
+                      Accent Color Token Preset
+                    </label>
+                    <select
+                      data-testid="accent-preset-select"
+                      value={settingsDraft.accent_preset}
+                      onChange={(e) =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          accent_preset: e.target.value as typeof settingsDraft.accent_preset,
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
+                    >
+                      <option value="cosmic-violet">Cosmic Violet (#9B8CFF)</option>
+                      <option value="classic-blue">Classic Blue (#0071E3)</option>
+                      <option value="editorial-gold">Warm Editorial Gold (#E8C998)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono uppercase tracking-wider text-muted">
+                      Default Motion Intensity (Visitor OS Reduced-Motion Always Overrides)
+                    </label>
+                    <select
+                      data-testid="motion-preset-select"
+                      value={settingsDraft.motion_preset}
+                      onChange={(e) =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          motion_preset: e.target.value as typeof settingsDraft.motion_preset,
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
+                    >
+                      <option value="cinematic">Cinematic (Full Scroll Timelines &amp; Rail)</option>
+                      <option value="subtle">Subtle (Gentle Fades &amp; Microinteractions)</option>
+                      <option value="off">Off (Zero Scroll-Linked Movement)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono uppercase tracking-wider text-muted">
+                      Card Border Radius Geometry ({settingsDraft.card_radius_px ?? 22}px)
+                    </label>
+                    <select
+                      data-testid="card-radius-select"
+                      value={String(settingsDraft.card_radius_px ?? 22)}
+                      onChange={(e) =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          card_radius_px: Number(e.target.value),
+                        })
+                      }
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
+                    >
+                      <option value="0">0px — Brutalist Sharp Corners</option>
+                      <option value="12">12px — Clean Modern Studio</option>
+                      <option value="22">22px — Cosmic Editorial Default</option>
+                      <option value="32">32px — Soft Sculptural Rounded</option>
+                    </select>
+                  </div>
+
+                  <label className="flex items-center gap-2.5 text-xs font-mono text-fg pt-1">
+                    <input
+                      type="checkbox"
+                      checked={settingsDraft.enable_3d_hero ?? true}
+                      onChange={(e) =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          enable_3d_hero: e.target.checked,
+                        })
+                      }
+                    />
+                    <span>Enable Interactive 3D Polyhedron Spark on Hero</span>
                   </label>
-                  <select
-                    data-testid="theme-mode-select"
-                    value={settingsDraft.theme_mode}
-                    onChange={(e) => {
-                      const mode = e.target.value as 'dark' | 'light';
-                      setSettingsDraft({ ...settingsDraft, theme_mode: mode });
-                      setThemeMode(mode);
-                    }}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
-                  >
-                    <option value="dark">Dark Cosmic Editorial (#0B0D14)</option>
-                    <option value="light">Minimalist Light Editorial (#F5F5F7)</option>
-                  </select>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-muted">
-                    Accent Color Token Preset
-                  </label>
-                  <select
-                    data-testid="accent-preset-select"
-                    value={settingsDraft.accent_preset}
-                    onChange={(e) =>
-                      setSettingsDraft({
-                        ...settingsDraft,
-                        accent_preset: e.target.value as typeof settingsDraft.accent_preset,
-                      })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
-                  >
-                    <option value="cosmic-violet">Cosmic Violet (#9B8CFF)</option>
-                    <option value="classic-blue">Classic Blue (#0071E3)</option>
-                    <option value="editorial-gold">Warm Editorial Gold (#E8C998)</option>
-                  </select>
-                </div>
+                {/* Right Column: Custom Color Pickers + WordPress Additional CSS/HTML */}
+                <div className="lg:col-span-6 rounded-card border border-border bg-raised p-6 space-y-5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-mono uppercase tracking-wider text-highlight">
+                      2. Custom Brand Color Pickers &amp; Global Code
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          custom_accent_color: null,
+                          custom_bg_color: null,
+                          custom_text_color: null,
+                          card_radius_px: 22,
+                        })
+                      }
+                      className="px-2.5 py-1 rounded border border-border bg-canvas text-[11px] font-mono text-muted hover:text-fg"
+                    >
+                      Reset Custom Colors
+                    </button>
+                  </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-muted">
-                    Default Motion Intensity (Visitor OS Reduced-Motion Always Overrides)
-                  </label>
-                  <select
-                    data-testid="motion-preset-select"
-                    value={settingsDraft.motion_preset}
-                    onChange={(e) =>
-                      setSettingsDraft({
-                        ...settingsDraft,
-                        motion_preset: e.target.value as typeof settingsDraft.motion_preset,
-                      })
-                    }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-border bg-canvas text-sm text-fg"
-                  >
-                    <option value="cinematic">Cinematic (Full Scroll Timelines &amp; Rail)</option>
-                    <option value="subtle">Subtle (Gentle Fades &amp; Microinteractions)</option>
-                    <option value="off">Off (Zero Scroll-Linked Movement)</option>
-                  </select>
-                </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="p-3 rounded-xl border border-border bg-canvas space-y-1.5">
+                      <label className="text-[10px] font-mono text-muted block">
+                        Custom Accent
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          data-testid="custom-accent-color-picker"
+                          value={settingsDraft.custom_accent_color || '#9B8CFF'}
+                          onChange={(e) =>
+                            setSettingsDraft({
+                              ...settingsDraft,
+                              custom_accent_color: e.target.value,
+                            })
+                          }
+                          className="w-8 h-8 rounded cursor-pointer border-0 bg-transparent"
+                        />
+                        <input
+                          type="text"
+                          data-testid="custom-accent-hex-input"
+                          value={settingsDraft.custom_accent_color || ''}
+                          onChange={(e) =>
+                            setSettingsDraft({
+                              ...settingsDraft,
+                              custom_accent_color: e.target.value.trim() || null,
+                            })
+                          }
+                          placeholder="#9B8CFF"
+                          className="w-full px-2 py-1 rounded border border-border bg-raised text-xs font-mono text-fg"
+                        />
+                      </div>
+                    </div>
 
-                <button
-                  type="button"
-                  data-testid="save-theme-settings-btn"
-                  onClick={() =>
-                    dispatchCmsMutation(
-                      'update_settings',
-                      settingsDraft as unknown as Record<string, unknown>,
-                      'Theme & motion settings persisted'
-                    )
-                  }
-                  className="px-5 py-3 rounded-xl bg-accent text-canvas font-semibold text-xs"
-                >
-                  Save Theme &amp; Motion Preferences
-                </button>
+                    <div className="p-3 rounded-xl border border-border bg-canvas space-y-1.5">
+                      <label className="text-[10px] font-mono text-muted block">
+                        Custom Background
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={settingsDraft.custom_bg_color || '#0B0D14'}
+                          onChange={(e) =>
+                            setSettingsDraft({
+                              ...settingsDraft,
+                              custom_bg_color: e.target.value,
+                            })
+                          }
+                          className="w-8 h-8 rounded cursor-pointer border-0 bg-transparent"
+                        />
+                        <input
+                          type="text"
+                          value={settingsDraft.custom_bg_color || ''}
+                          onChange={(e) =>
+                            setSettingsDraft({
+                              ...settingsDraft,
+                              custom_bg_color: e.target.value.trim() || null,
+                            })
+                          }
+                          placeholder="#0B0D14"
+                          className="w-full px-2 py-1 rounded border border-border bg-raised text-xs font-mono text-fg"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl border border-border bg-canvas space-y-1.5">
+                      <label className="text-[10px] font-mono text-muted block">
+                        Custom Text Color
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={settingsDraft.custom_text_color || '#F6F3EB'}
+                          onChange={(e) =>
+                            setSettingsDraft({
+                              ...settingsDraft,
+                              custom_text_color: e.target.value,
+                            })
+                          }
+                          className="w-8 h-8 rounded cursor-pointer border-0 bg-transparent"
+                        />
+                        <input
+                          type="text"
+                          value={settingsDraft.custom_text_color || ''}
+                          onChange={(e) =>
+                            setSettingsDraft({
+                              ...settingsDraft,
+                              custom_text_color: e.target.value.trim() || null,
+                            })
+                          }
+                          placeholder="#F6F3EB"
+                          className="w-full px-2 py-1 rounded border border-border bg-raised text-xs font-mono text-fg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-mono text-muted">
+                      Additional Global CSS (WordPress Additional CSS)
+                    </label>
+                    <textarea
+                      rows={3}
+                      data-testid="global-custom-css-input"
+                      value={settingsDraft.custom_css || ''}
+                      onChange={(e) =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          custom_css: e.target.value,
+                        })
+                      }
+                      placeholder="/* Write any global CSS override here */"
+                      className="w-full px-3 py-2 rounded-xl border border-border bg-canvas font-mono text-xs text-fg"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-mono text-muted">
+                      Global Top Announcement / Custom Header HTML
+                    </label>
+                    <textarea
+                      rows={2}
+                      data-testid="global-head-html-input"
+                      value={settingsDraft.custom_head_html || ''}
+                      onChange={(e) =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          custom_head_html: e.target.value,
+                        })
+                      }
+                      placeholder="<div style='text-align:center;padding:8px;background:#9B8CFF;color:#0B0D14;font-size:12px;font-weight:600;'>Announcement Banner</div>"
+                      className="w-full px-3 py-2 rounded-xl border border-border bg-canvas font-mono text-xs text-fg"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-mono text-muted">
+                      Global Custom Footer HTML / Widget
+                    </label>
+                    <textarea
+                      rows={2}
+                      data-testid="global-footer-html-input"
+                      value={settingsDraft.custom_footer_html || ''}
+                      onChange={(e) =>
+                        setSettingsDraft({
+                          ...settingsDraft,
+                          custom_footer_html: e.target.value,
+                        })
+                      }
+                      placeholder="<!-- Optional footer HTML widget -->"
+                      className="w-full px-3 py-2 rounded-xl border border-border bg-canvas font-mono text-xs text-fg"
+                    />
+                  </div>
+                </div>
               </div>
+
+              <button
+                type="button"
+                data-testid="save-theme-settings-btn"
+                onClick={() =>
+                  dispatchCmsMutation(
+                    'update_settings',
+                    settingsDraft as unknown as Record<string, unknown>,
+                    'Theme customizer, colors & global code saved'
+                  )
+                }
+                className="px-6 py-3.5 rounded-xl bg-accent text-canvas font-semibold text-xs inline-flex items-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                <span>Save Theme &amp; Customizer Preferences</span>
+              </button>
             </div>
           ) : null}
 
@@ -2732,9 +3159,20 @@ export function AdminCmsWorkspace({
 
 function SectionInspectorForm({
   section,
+  mediaAssets,
+  onUploadAsset,
   onSave,
 }: {
   section: PageSection;
+  mediaAssets: OdysseyDatabaseState['media_assets'];
+  onUploadAsset: (asset: {
+    filename: string;
+    public_url: string;
+    mime_type: string;
+    size_bytes: number;
+    alt_text: string;
+    caption: string;
+  }) => Promise<unknown>;
   onSave: (updated: Partial<PageSection> & { id: string }) => void;
 }) {
   const [label, setLabel] = useState(section.label);
@@ -2745,9 +3183,27 @@ function SectionInspectorForm({
   const [primaryCtaLabel, setPrimaryCtaLabel] = useState(
     String(section.content_jsonb?.primary_cta_label || 'Explore My Work')
   );
+  const [imageUrl, setImageUrl] = useState(
+    String(section.content_jsonb?.image_url || '')
+  );
+  const [imageAlt, setImageAlt] = useState(
+    String(section.content_jsonb?.image_alt || section.heading || '')
+  );
+  const [customHtml, setCustomHtml] = useState(
+    String(section.content_jsonb?.custom_html || '')
+  );
+  const [customCss, setCustomCss] = useState(
+    String(section.content_jsonb?.custom_css || '')
+  );
+  const [pythonTitle, setPythonTitle] = useState(
+    String(section.content_jsonb?.python_title || 'Interactive Python 3 Studio')
+  );
+  const [pythonCode, setPythonCode] = useState(
+    String(section.content_jsonb?.python_code || '')
+  );
 
   return (
-    <div className="lg:col-span-7 rounded-card border border-border bg-raised p-6 space-y-4">
+    <div className="lg:col-span-7 rounded-card border border-border bg-raised p-6 space-y-5">
       <div className="flex items-center justify-between">
         <span className="text-xs font-mono text-accent uppercase">
           INSPECTING: {section.section_key} ({section.type})
@@ -2819,6 +3275,109 @@ function SectionInspectorForm({
         </div>
       ) : null}
 
+      {/* WordPress-Style Section Image Uploader (JPG/PNG) */}
+      <MediaImageField
+        label="Section JPG / Visual Image (Optional)"
+        value={imageUrl}
+        altValue={imageAlt}
+        onChangeUrl={setImageUrl}
+        onChangeAlt={setImageAlt}
+        mediaAssets={mediaAssets}
+        onUploadAsset={onUploadAsset}
+        testIdPrefix="section-image"
+        helperText="Upload a .JPG photo to display inside this homepage section."
+      />
+
+      {/* Custom HTML & CSS Builder Block */}
+      <div className="rounded-xl border border-border bg-canvas/70 p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-mono uppercase tracking-wider text-highlight">
+            Custom HTML &amp; Scoped CSS Widget (WordPress Custom HTML Block)
+          </span>
+          <button
+            type="button"
+            onClick={() =>
+              setCustomHtml(
+                '<div style="padding:18px;border-radius:16px;border:1px solid var(--border-subtle);background:var(--bg-raised);">\n  <h3 style="font-size:18px;font-weight:600;margin-bottom:6px;">Custom Brand Callout</h3>\n  <p style="font-size:14px;opacity:0.85;">Crafted with custom HTML directly inside the Odyssey CMS.</p>\n</div>'
+              )
+            }
+            className="px-2.5 py-1 rounded bg-raised border border-border text-[11px] font-mono text-accent hover:border-accent"
+          >
+            Insert Sample HTML Card
+          </button>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-[11px] font-mono text-muted">Custom HTML Code</label>
+          <textarea
+            rows={4}
+            data-testid="section-custom-html-input"
+            value={customHtml}
+            onChange={(e) => setCustomHtml(e.target.value)}
+            placeholder="<div>Write custom HTML widgets, embeds, or cards here...</div>"
+            className="w-full px-3 py-2 rounded-lg border border-border bg-canvas font-mono text-xs text-fg"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-[11px] font-mono text-muted">Scoped Custom CSS</label>
+          <textarea
+            rows={2}
+            data-testid="section-custom-css-input"
+            value={customCss}
+            onChange={(e) => setCustomCss(e.target.value)}
+            placeholder=".my-custom-card { border-color: #9B8CFF; }"
+            className="w-full px-3 py-2 rounded-lg border border-border bg-canvas font-mono text-xs text-fg"
+          />
+        </div>
+      </div>
+
+      {/* Interactive Python 3 Code Studio Block */}
+      <div className="rounded-xl border border-border bg-canvas/70 p-4 space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <span className="text-xs font-mono uppercase tracking-wider text-accent">
+            Interactive Python 3 Code Studio (Runs Live on Website)
+          </span>
+          <button
+            type="button"
+            data-testid="insert-sample-python-btn"
+            onClick={() => {
+              setPythonTitle('Jahin Azmain — Live Python ROI & Project Estimator');
+              setPythonCode(
+                'creator = "Jahin Azmain"\ndisciplines = ["Graphic Design", "Web Development", "Digital Marketing"]\nfor item in disciplines:\n  print(f"Active Discipline: {item}")\nrender_html("<div style=\'margin-top:8px;font-weight:600;color:#9B8CFF;\'>Python 3 Output Rendered Live!</div>")'
+              );
+            }}
+            className="px-2.5 py-1 rounded bg-raised border border-border text-[11px] font-mono text-highlight hover:border-highlight"
+          >
+            Insert Sample Python Script
+          </button>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-[11px] font-mono text-muted">Python Widget Title</label>
+          <input
+            type="text"
+            value={pythonTitle}
+            onChange={(e) => setPythonTitle(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg border border-border bg-canvas text-xs text-fg"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-[11px] font-mono text-muted">
+            Python 3 Script (Supports print(), variables, math, for-loops, f-strings, and render_html())
+          </label>
+          <textarea
+            rows={5}
+            data-testid="section-python-code-input"
+            value={pythonCode}
+            onChange={(e) => setPythonCode(e.target.value)}
+            placeholder={'name = "Jahin Azmain"\nprint(f"Created by {name}")'}
+            className="w-full px-3 py-2 rounded-lg border border-border bg-canvas font-mono text-xs text-emerald-300"
+          />
+        </div>
+      </div>
+
       <div className="pt-2">
         <button
           type="button"
@@ -2834,6 +3393,12 @@ function SectionInspectorForm({
               content_jsonb: {
                 ...section.content_jsonb,
                 ...(section.type === 'hero' ? { primary_cta_label: primaryCtaLabel } : {}),
+                image_url: imageUrl.trim(),
+                image_alt: imageAlt.trim(),
+                custom_html: customHtml,
+                custom_css: customCss,
+                python_title: pythonTitle,
+                python_code: pythonCode,
               },
             })
           }

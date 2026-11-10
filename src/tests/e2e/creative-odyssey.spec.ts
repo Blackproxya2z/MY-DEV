@@ -208,5 +208,72 @@ test.describe('Jahin Azmain — The Creative Odyssey (Full-Stack E2E Proof Suite
     await page.getByRole('button', { name: 'Mark as Read' }).first().click();
     await expect(page.getByTestId('cms-status-toast')).toContainText('Marked inquiry as read');
   });
+
+  test('4. WordPress-Style CMS Proof: JPG Photo Upload, Custom HTML & Python 3 Live Execution, and Theme Customizer', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    // 1. Login to Admin CMS
+    await page.goto('/admin/login');
+    await page.fill('[data-testid="admin-login-email"]', 'azmain56@gmail.com');
+    await page.fill('[data-testid="admin-login-password"]', 'OdysseyAdmin2026!');
+    await page.click('[data-testid="admin-login-submit"]');
+    await expect(page).toHaveURL(/\/admin\/dashboard/);
+
+    // 2. Upload a real .JPG image in Profile (Owner Portrait Photo)
+    await page.click('[data-testid="cms-tab-profile"]');
+    // 1x1 valid JPEG binary bytes
+    const minimalJpgBase64 =
+      '/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=';
+    const jpgBuffer = Buffer.from(minimalJpgBase64, 'base64');
+
+    await page.locator('[data-testid="profile-avatar-file-input"]').setInputFiles({
+      name: 'jahin-portrait.jpg',
+      mimeType: 'image/jpeg',
+      buffer: jpgBuffer,
+    });
+
+    await expect(page.getByTestId('profile-avatar-preview-img')).toBeVisible();
+    await page.getByRole('button', { name: /Save & Publish Profile/i }).click();
+    await expect(page.getByTestId('cms-status-toast')).toContainText('Public profile updated');
+
+    // 3. In Site Editor, add Custom HTML + Interactive Python 3 Code to Hero Section & publish
+    await page.click('[data-testid="cms-tab-site-editor"]');
+    await page.fill(
+      '[data-testid="section-custom-html-input"]',
+      '<div id="wp-custom-banner">Custom WordPress-Style HTML Block Active</div>'
+    );
+    await page.click('[data-testid="insert-sample-python-btn"]');
+    await page.click('[data-testid="publish-section-btn"]');
+    await expect(page.getByTestId('cms-status-toast')).toContainText('Published updates');
+
+    // 4. Test WordPress-Style Theme Customizer (Custom Accent Color & Global CSS)
+    await page.click('[data-testid="cms-tab-theme"]');
+    await page.fill('[data-testid="custom-accent-hex-input"]', '#9B8CFF');
+    await page.fill(
+      '[data-testid="global-custom-css-input"]',
+      '/* Customizer CSS verified */'
+    );
+    await page.click('[data-testid="save-theme-settings-btn"]');
+    await expect(page.getByTestId('cms-status-toast')).toContainText('Theme customizer');
+
+    // 5. Visit Public Homepage (/) and verify JPG Portrait, Custom HTML, and Live Python 3 Execution!
+    await page.goto('/');
+    await expect(page.getByTestId('hero-portrait-img')).toBeVisible();
+    await expect(page.locator('#wp-custom-banner')).toContainText(
+      'Custom WordPress-Style HTML Block Active'
+    );
+    await expect(page.getByText('Active Discipline: Graphic Design')).toBeVisible();
+    await expect(
+      page.getByText('Python 3 Output Rendered Live!', { exact: true })
+    ).toBeVisible();
+
+    // Clean up custom HTML/Python from Hero so default state stays clean
+    await page.goto('/admin/dashboard?tab=site-editor');
+    await page.fill('[data-testid="section-custom-html-input"]', '');
+    await page.fill('[data-testid="section-python-code-input"]', '');
+    await page.click('[data-testid="publish-section-btn"]');
+  });
 });
 

@@ -90,6 +90,15 @@ export function JournalFilterGrid({ posts }: { posts: Post[] }) {
               className="group rounded-card border border-border bg-raised/90 p-7 flex flex-col justify-between space-y-6 hover:border-accent/70 transition-colors"
             >
               <div className="space-y-3.5">
+                {post.cover_url ? (
+                  <div className="aspect-[16/9] rounded-xl overflow-hidden border border-border bg-canvas mb-2">
+                    <img
+                      src={post.cover_url}
+                      alt={post.cover_alt || post.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ) : null}
                 <div className="flex items-center justify-between gap-2 text-xs font-mono text-muted">
                   <span className="text-accent">{post.category_name}</span>
                   <span className="inline-flex items-center gap-1">

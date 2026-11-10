@@ -6,12 +6,15 @@ import {
   updateAdminProfileData,
   updateAdminSiteSettings,
   upsertAdminPageSection,
+  deleteAdminPageSection,
   reorderAdminPageSections,
   restoreAdminContentRevision,
   upsertAdminService,
   deleteAdminService,
   upsertAdminProject,
   deleteAdminProject,
+  addAdminProjectImage,
+  deleteAdminProjectImage,
   upsertAdminPost,
   deleteAdminPost,
   upsertAdminSkill,
@@ -101,6 +104,21 @@ export async function POST(request: NextRequest) {
         const record = await upsertAdminPageSection(payload, actor);
         revalidateAllSiteRoutes();
         return NextResponse.json({ success: true, record });
+      }
+      case 'delete_section': {
+        await deleteAdminPageSection(payload.id, actor);
+        revalidateAllSiteRoutes();
+        return NextResponse.json({ success: true });
+      }
+      case 'add_project_image': {
+        const record = await addAdminProjectImage(payload, actor);
+        revalidateAllSiteRoutes();
+        return NextResponse.json({ success: true, record });
+      }
+      case 'delete_project_image': {
+        await deleteAdminProjectImage(payload.id, actor);
+        revalidateAllSiteRoutes();
+        return NextResponse.json({ success: true });
       }
       case 'reorder_sections': {
         const records = await reorderAdminPageSections(payload.orderedIds, actor);

@@ -31,6 +31,7 @@ import { HeroSparkMotif } from '@/components/story/HeroSparkMotif';
 import { HorizontalProjectRail } from '@/components/story/HorizontalProjectRail';
 import { ContactFormIsland } from '@/components/portfolio/ContactFormIsland';
 import { DynamicLucideIcon } from '@/components/ui/LucideIcon';
+import { CustomCodeAndPythonBlock } from '@/components/story/CustomCodeAndPythonBlock';
 
 export interface SectionRendererProps {
   sections: PageSection[];
@@ -181,11 +182,24 @@ export function SectionRenderer({
                   <div className="lg:col-span-5">
                     <HeroSparkMotif
                       caption={sparkCaption}
-                      portraitUrl={profile.avatar_url}
+                      portraitUrl={
+                        (section.content_jsonb?.image_url as string) ||
+                        profile.hero_image_url ||
+                        profile.avatar_url
+                      }
                       ownerName={profile.full_name}
+                      enable3D={settings.enable_3d_hero}
                     />
                   </div>
                 </div>
+
+                <CustomCodeAndPythonBlock
+                  sectionId={section.id}
+                  customHtml={section.content_jsonb?.custom_html as string}
+                  customCss={section.content_jsonb?.custom_css as string}
+                  pythonCode={section.content_jsonb?.python_code as string}
+                  pythonTitle={section.content_jsonb?.python_title as string}
+                />
 
                 {/* Scroll to Explore Affordance (Real Anchor to Next Section) */}
                 <div className="mt-12 pt-6 border-t border-border/50 flex items-center justify-between text-xs font-mono text-muted">
@@ -351,6 +365,15 @@ export function SectionRenderer({
                       className="group rounded-card border border-border bg-raised/90 p-7 flex flex-col justify-between space-y-6 hover:-translate-y-1 hover:border-accent/70 transition-all duration-300"
                     >
                       <div className="space-y-4">
+                        {service.cover_url ? (
+                          <div className="aspect-[16/9] rounded-xl overflow-hidden border border-border bg-canvas mb-2">
+                            <img
+                              src={service.cover_url}
+                              alt={service.cover_alt || service.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ) : null}
                         <div className="flex items-center justify-between gap-3">
                           <span className="text-xs font-mono px-2.5 py-1 rounded-md border border-border bg-canvas text-accent font-semibold">
                             {service.number_label} // {service.category}
@@ -723,6 +746,15 @@ export function SectionRenderer({
                       className="group rounded-card border border-border bg-raised/90 p-6 flex flex-col justify-between space-y-5 hover:border-accent/70 transition-colors"
                     >
                       <div className="space-y-3">
+                        {post.cover_url ? (
+                          <div className="aspect-[16/9] rounded-xl overflow-hidden border border-border bg-canvas mb-2">
+                            <img
+                              src={post.cover_url}
+                              alt={post.cover_alt || post.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ) : null}
                         <div className="flex items-center justify-between gap-2 text-xs font-mono text-muted">
                           <span className="text-accent">{post.category_name}</span>
                           <span className="inline-flex items-center gap-1">
@@ -875,7 +907,7 @@ export function SectionRenderer({
           );
         }
 
-        // Generic Modular Section Fallback (text-image, cta, stats, spacer)
+        // Generic Modular / Custom Code / Python / Text-Image Section
         return (
           <section
             key={section.id}
@@ -883,12 +915,39 @@ export function SectionRenderer({
             data-chapter-code={chapterIdx}
             className="py-16 md:py-24 bg-canvas"
           >
-            <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-              <span className="text-xs font-mono text-accent">{chapterIdx}</span>
-              <h2 className="text-2xl sm:text-3xl font-semibold text-fg">{section.heading}</h2>
-              {section.subheading ? (
-                <p className="text-base text-muted max-w-2xl">{section.subheading}</p>
-              ) : null}
+            <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-raised text-xs font-mono text-accent">
+                  <span>{chapterIdx}</span>
+                  <span>—</span>
+                  <span>{section.label}</span>
+                </div>
+                {section.eyebrow ? (
+                  <p className="text-xs font-mono uppercase tracking-widest text-highlight">
+                    {section.eyebrow}
+                  </p>
+                ) : null}
+                <h2 className="chapter-heading font-display font-semibold text-fg">
+                  {section.heading}
+                </h2>
+                {section.subheading ? (
+                  <p className="text-base text-muted max-w-3xl leading-relaxed">
+                    {section.subheading}
+                  </p>
+                ) : null}
+              </div>
+
+              <CustomCodeAndPythonBlock
+                sectionId={section.id}
+                imageUrl={section.content_jsonb?.image_url as string}
+                imageAlt={(section.content_jsonb?.image_alt as string) || section.heading}
+                customHtml={section.content_jsonb?.custom_html as string}
+                customCss={section.content_jsonb?.custom_css as string}
+                pythonCode={section.content_jsonb?.python_code as string}
+                pythonTitle={
+                  (section.content_jsonb?.python_title as string) || section.label
+                }
+              />
             </div>
           </section>
         );

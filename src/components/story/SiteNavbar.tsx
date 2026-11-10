@@ -45,9 +45,19 @@ export function SiteNavbar({
           className="group flex items-center gap-3 focus-visible:rounded-lg"
           aria-label={`${profile.full_name} — Home`}
         >
-          <span className="w-10 h-10 rounded-xl border border-border bg-raised flex items-center justify-center font-mono text-sm font-semibold tracking-wider text-fg group-hover:border-accent transition-colors">
-            JA
-          </span>
+          {profile.logo_url || profile.avatar_url ? (
+            <span className="w-10 h-10 rounded-xl border border-border bg-raised overflow-hidden flex items-center justify-center group-hover:border-accent transition-colors">
+              <img
+                src={(profile.logo_url || profile.avatar_url)!}
+                alt={profile.full_name}
+                className="w-full h-full object-cover"
+              />
+            </span>
+          ) : (
+            <span className="w-10 h-10 rounded-xl border border-border bg-raised flex items-center justify-center font-mono text-sm font-semibold tracking-wider text-fg group-hover:border-accent transition-colors">
+              JA
+            </span>
+          )}
           <div className="flex flex-col">
             <span className="text-sm font-semibold tracking-tight text-fg flex items-center gap-1.5">
               {profile.full_name}
