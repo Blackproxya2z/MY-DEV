@@ -1,12 +1,20 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Syne, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { getPublicSiteData } from '@/lib/db';
 import { OdysseyExperienceProvider } from '@/lib/motion';
 
-const inter = Inter({
+const syneDisplay = Syne({
   subsets: ['latin'],
+  weight: ['600', '700', '800'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
@@ -51,7 +59,7 @@ export default async function RootLayout({
       data-accent={settings.accent_preset}
       data-motion={settings.motion_preset}
       style={customThemeVars}
-      className={`${inter.variable} ${jetbrainsMono.variable} ${
+      className={`${syneDisplay.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} ${
         settings.theme_mode === 'dark' ? 'dark' : ''
       }`}
       suppressHydrationWarning

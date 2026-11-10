@@ -57,25 +57,53 @@
   }
 }
 
-/* Fluid Typography Scales (PRD Section 3.4) */
+/* Fluid Typography Scales (PRD Section 3.4 + 10K Cinema Display) */
 .hero-display-title {
-  font-size: clamp(2.65rem, 11vw, 4.4rem);
-  line-height: 1.04;
-  letter-spacing: -0.032em;
+  font-size: clamp(2.1rem, 7.5vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
 }
 
 @media (min-width: 768px) {
   .hero-display-title {
-    font-size: clamp(3.5rem, 7.2vw, 6.5rem);
-    line-height: 1.02;
-    letter-spacing: -0.038em;
+    font-size: clamp(2.5rem, 3.9vw, 3.75rem);
+    line-height: 1.06;
+    letter-spacing: -0.028em;
   }
 }
 
 .chapter-heading {
-  font-size: clamp(2rem, 5vw, 3.75rem);
-  line-height: 1.08;
+  font-size: clamp(2rem, 4.6vw, 3.6rem);
+  line-height: 1.06;
   letter-spacing: -0.028em;
+}
+
+/* 10K Cinema Bento Surface & Rim Glow */
+.cinema-bento-card {
+  position: relative;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.035) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.55);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="light"] .cinema-bento-card {
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(248, 249, 252, 0.85) 100%
+  );
+  box-shadow: 0 18px 40px -20px rgba(15, 23, 42, 0.08);
+}
+
+.cinema-bento-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--brand-accent);
 }
 
 /* Subtle architectural grid and paper-to-pixel surface lines */

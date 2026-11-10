@@ -69,8 +69,11 @@ export function SiteNavbar({
           </div>
         </Link>
 
-        {/* Desktop Primary Navigation */}
-        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-1 lg:gap-2">
+        {/* Desktop Primary Navigation (Floating Glassmorphic Capsule) */}
+        <nav
+          aria-label="Main navigation"
+          className="hidden md:flex items-center gap-1 p-1 rounded-2xl border border-border/80 bg-raised/70 backdrop-blur-xl shadow-sm"
+        >
           {navigation.map((item) => {
             const isActive =
               item.href === '/'
@@ -82,10 +85,10 @@ export function SiteNavbar({
                 href={item.href}
                 target={item.is_external ? '_blank' : undefined}
                 rel={item.is_external ? 'noopener noreferrer' : undefined}
-                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3.5 py-1.5 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? 'text-fg bg-raised border border-border/80'
-                    : 'text-muted hover:text-fg hover:bg-raised/60'
+                    ? 'text-canvas bg-accent font-semibold shadow-sm'
+                    : 'text-muted hover:text-fg hover:bg-canvas/60'
                 }`}
               >
                 {item.label}

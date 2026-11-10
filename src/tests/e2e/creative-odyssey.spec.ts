@@ -37,6 +37,21 @@ test.describe('Jahin Azmain — The Creative Odyssey (Full-Stack E2E Proof Suite
     await expect(page.locator('#chapter-journal')).toBeVisible();
     await expect(page.locator('#chapter-epilogue')).toBeVisible();
 
+    // Verify 10K Cinematic Scroll-Scrubbing Hero & Mid-Journey Interactive Scope Builder
+    await expect(page.getByText('SCROLL OR CLICK TO SCRUB FRAMES')).toBeVisible();
+    await expect(page.getByTestId('interactive-scope-builder')).toBeVisible();
+    await page.screenshot({
+      path: 'C:/Users/SINISTER/.gemini/antigravity/brain/cd1ce552-56e1-4ea6-9476-6f80483aa2f7/preview-10k-01-hero.png',
+    });
+    await page.getByTestId('interactive-scope-builder').scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: 'C:/Users/SINISTER/.gemini/antigravity/brain/cd1ce552-56e1-4ea6-9476-6f80483aa2f7/preview-10k-02-scope-builder.png',
+    });
+    await page.locator('#chapter-worlds').scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: 'C:/Users/SINISTER/.gemini/antigravity/brain/cd1ce552-56e1-4ea6-9476-6f80483aa2f7/preview-10k-03-worlds-built.png',
+    });
+
     // Verify reduced motion toggle updates data-motion="off"
     const motionBtn = page.getByRole('button', { name: 'Toggle reduced motion' });
     await motionBtn.click();

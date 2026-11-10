@@ -1,9 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  ArrowDown,
   ArrowUpRight,
-  Download,
   Mail,
   MessageSquare,
   Sparkles,
@@ -27,7 +25,8 @@ import {
   Testimonial,
 } from '@/lib/schemas';
 import { formatWhatsAppUrl, formatDateReadable } from '@/lib/utils';
-import { HeroSparkMotif } from '@/components/story/HeroSparkMotif';
+import { CinematicScrollHero } from '@/components/story/CinematicScrollHero';
+import { InteractiveScopeBuilder } from '@/components/story/InteractiveScopeBuilder';
 import { HorizontalProjectRail } from '@/components/story/HorizontalProjectRail';
 import { ContactFormIsland } from '@/components/portfolio/ContactFormIsland';
 import { DynamicLucideIcon } from '@/components/ui/LucideIcon';
@@ -95,104 +94,38 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="relative min-h-[calc(100svh-5rem)] flex flex-col justify-center py-16 md:py-24 cosmic-grid-backdrop overflow-hidden"
+              className="relative cosmic-grid-backdrop overflow-x-clip"
             >
-              <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                  {/* Left Editorial Column */}
-                  <div className="lg:col-span-7 space-y-6">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="px-3 py-1 rounded-full border border-border bg-raised text-xs font-mono text-accent tracking-wider">
-                        {chapterIdx} — PROLOGUE
-                      </span>
-                      {profile.is_available ? (
-                        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-raised/90 text-xs font-mono text-fg">
-                          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                          <span>{profile.availability_text}</span>
-                        </span>
-                      ) : null}
-                    </div>
-
-                    <p className="text-xs sm:text-sm font-mono uppercase tracking-widest text-highlight">
-                      {section.eyebrow ||
-                        `${profile.full_name.toUpperCase()} / ${profile.role_title.toUpperCase()}`}
-                    </p>
-
-                    <h1 className="hero-display-title font-display font-semibold text-fg">
-                      {section.heading}
-                    </h1>
-
-                    <p className="text-base sm:text-lg text-muted leading-relaxed max-w-2xl">
-                      {section.subheading || profile.subheadline}
-                    </p>
-
-                    {/* Discipline Tags */}
-                    {profile.categories_list && profile.categories_list.length > 0 ? (
-                      <div className="flex flex-wrap gap-2 pt-1">
-                        {profile.categories_list.map((cat) => (
-                          <span
-                            key={cat}
-                            className="px-3 py-1 rounded-lg border border-border/80 bg-raised/60 text-xs font-mono text-muted"
-                          >
-                            {cat}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-
-                    {/* Three Working CTAs (PRD Section 4) */}
-                    <div className="flex flex-wrap items-center gap-3.5 pt-3">
-                      <a
-                        href={primaryCtaHref}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-accent text-canvas font-semibold text-sm hover:opacity-95 transition-opacity min-h-[48px]"
-                      >
-                        <span>{primaryCtaLabel}</span>
-                        <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-                      </a>
-
-                      <Link
-                        href={secondaryCtaHref}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-border bg-raised text-fg font-semibold text-sm hover:border-accent transition-colors min-h-[48px]"
-                      >
-                        <span>{secondaryCtaLabel}</span>
-                      </Link>
-
-                      {profile.resume_url ? (
-                        <a
-                          href={profile.resume_url}
-                          download
-                          className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl border border-border/80 bg-canvas text-muted hover:text-fg text-sm font-mono transition-colors min-h-[48px]"
-                        >
-                          <Download className="w-4 h-4 text-highlight" aria-hidden="true" />
-                          <span>{tertiaryCtaLabel}</span>
-                        </a>
-                      ) : (
-                        <Link
-                          href="/resume"
-                          className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl border border-border/80 bg-canvas text-muted hover:text-fg text-sm font-mono transition-colors min-h-[48px]"
-                        >
-                          <span>View Interactive Resume</span>
-                          <ArrowUpRight className="w-4 h-4 text-highlight" aria-hidden="true" />
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right Luminous Spark Motif Column */}
-                  <div className="lg:col-span-5">
-                    <HeroSparkMotif
-                      caption={sparkCaption}
-                      portraitUrl={
-                        (section.content_jsonb?.image_url as string) ||
-                        profile.hero_image_url ||
-                        profile.avatar_url
-                      }
-                      ownerName={profile.full_name}
-                      enable3D={settings.enable_3d_hero}
-                    />
-                  </div>
-                </div>
-
+              <CinematicScrollHero
+                chapterIdx={chapterIdx}
+                eyebrow={
+                  section.eyebrow ||
+                  `${profile.full_name.toUpperCase()} / ${profile.role_title.toUpperCase()}`
+                }
+                heading={section.heading}
+                subheading={section.subheading || profile.subheadline}
+                availabilityText={profile.availability_text}
+                isAvailable={profile.is_available}
+                categories={profile.categories_list || []}
+                primaryCtaLabel={primaryCtaLabel}
+                primaryCtaHref={primaryCtaHref}
+                secondaryCtaLabel={secondaryCtaLabel}
+                secondaryCtaHref={secondaryCtaHref}
+                tertiaryCtaLabel={tertiaryCtaLabel}
+                resumeUrl={profile.resume_url}
+                sparkCaption={sparkCaption}
+                portraitUrl={
+                  (section.content_jsonb?.image_url as string) ||
+                  profile.hero_image_url ||
+                  profile.avatar_url
+                }
+                heroVideoUrl={(section.content_jsonb?.hero_video_url as string) || null}
+                ownerName={profile.full_name}
+                ownerRole={profile.role_title}
+                enable3D={settings.enable_3d_hero}
+                nextAnchor={nextAnchor}
+                isPreviewMode={isPreviewMode}
+              >
                 <CustomCodeAndPythonBlock
                   sectionId={section.id}
                   customHtml={section.content_jsonb?.custom_html as string}
@@ -200,21 +133,7 @@ export function SectionRenderer({
                   pythonCode={section.content_jsonb?.python_code as string}
                   pythonTitle={section.content_jsonb?.python_title as string}
                 />
-
-                {/* Scroll to Explore Affordance (Real Anchor to Next Section) */}
-                <div className="mt-12 pt-6 border-t border-border/50 flex items-center justify-between text-xs font-mono text-muted">
-                  <a
-                    href={nextAnchor}
-                    className="inline-flex items-center gap-2 text-muted hover:text-fg transition-colors py-1"
-                  >
-                    <ArrowDown className="w-4 h-4 text-accent animate-bounce" aria-hidden="true" />
-                    <span>Scroll to explore the odyssey</span>
-                  </a>
-                  <span className="hidden sm:inline">
-                    {isPreviewMode ? 'LIVE SITE EDITOR PREVIEW' : 'DARK COSMIC EDITORIAL'}
-                  </span>
-                </div>
-              </div>
+              </CinematicScrollHero>
             </section>
           );
         }
@@ -362,7 +281,7 @@ export function SectionRenderer({
                   {services.map((service) => (
                     <article
                       key={service.id}
-                      className="group rounded-card border border-border bg-raised/90 p-7 flex flex-col justify-between space-y-6 hover:-translate-y-1 hover:border-accent/70 transition-all duration-300"
+                      className="group cinema-bento-card rounded-card border border-border bg-raised/90 p-7 flex flex-col justify-between space-y-6 hover:border-accent/70 transition-all duration-300"
                     >
                       <div className="space-y-4">
                         {service.cover_url ? (
@@ -427,6 +346,13 @@ export function SectionRenderer({
                     </article>
                   ))}
                 </div>
+
+                {/* Mid-Journey 10K Interactive Moment: Scope Architect */}
+                <InteractiveScopeBuilder
+                  services={services}
+                  ownerName={profile.full_name}
+                  whatsappNormalized={profile.whatsapp_normalized}
+                />
               </div>
             </section>
           );
@@ -743,7 +669,7 @@ export function SectionRenderer({
                   {latestPosts.map((post) => (
                     <article
                       key={post.id}
-                      className="group rounded-card border border-border bg-raised/90 p-6 flex flex-col justify-between space-y-5 hover:border-accent/70 transition-colors"
+                      className="group cinema-bento-card rounded-card border border-border bg-raised/90 p-6 flex flex-col justify-between space-y-5 hover:border-accent/70 transition-colors"
                     >
                       <div className="space-y-3">
                         {post.cover_url ? (
