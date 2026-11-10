@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: Preview Creative Odyssey (Edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Next.js: Preview Admin CMS (Edge)",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3000/admin/login",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}

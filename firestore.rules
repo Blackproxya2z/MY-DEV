@@ -1,0 +1,27 @@
+rules_version = '2';
+
+// ============================================================================
+// JAHIN AZMAIN — THE CREATIVE ODYSSEY (v2.0)
+// Cloud Firestore Production Security Rules
+// ============================================================================
+// Architecture Note:
+// All database reads and mutations are executed server-side by Next.js Route
+// Handlers & Server Components using the Firebase Service Account (which
+// bypasses client rules and enforces strict Zod + HMAC/Admin verification).
+// Therefore, direct browser/client SDK access to the `odyssey_cms` collection
+// is completely locked down (`allow read, write: if false;`) to prevent any
+// unauthorized client-side tampering or scraping of private contact inbox data.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /odyssey_cms/{document=**} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

@@ -1,0 +1,55 @@
+/* ==========================================================================
+   JAHIN AZMAIN — THE CREATIVE ODYSSEY
+   Design Tokens (PRD Section 3.3 — Dark Cosmic Editorial & Light Editorial)
+   ========================================================================== */
+
+:root,
+[data-theme="dark"] {
+  --bg-canvas: #0B0D14;
+  --bg-raised: #171A25;
+  --bg-elevated: #1F2332;
+  --text-primary: #F6F3EB;
+  --text-secondary: #A7ACBD;
+  --border-subtle: #343747;
+  --brand-accent: #9B8CFF;
+  --warm-highlight: #E8C998;
+  --focus-ring: #C6BDFF;
+  --radius-card: 22px;
+  --surface-glass: rgba(23, 26, 37, 0.78);
+  --spark-glow: rgba(155, 140, 255, 0.28);
+  --warm-glow: rgba(232, 201, 152, 0.22);
+}
+
+[data-theme="light"] {
+  --bg-canvas: #F5F5F7;
+  --bg-raised: #FFFFFF;
+  --bg-elevated: #ECECEF;
+  --text-primary: #1D1D1F;
+  --text-secondary: #686B76;
+  --border-subtle: #E5E5EA;
+  --brand-accent: #6754D9;
+  --warm-highlight: #B77E45;
+  --focus-ring: #5F43E6;
+  --radius-card: 22px;
+  --surface-glass: rgba(255, 255, 255, 0.84);
+  --spark-glow: rgba(103, 84, 217, 0.16);
+  --warm-glow: rgba(183, 126, 69, 0.14);
+}
+
+/* Optional Classic Blue (#0071E3) Accent Preset (PRD Section 3.3) */
+[data-accent="classic-blue"] {
+  --brand-accent: #0071E3;
+  --focus-ring: #3898FF;
+  --spark-glow: rgba(0, 113, 227, 0.22);
+}
+
+[data-accent="editorial-gold"] {
+  --brand-accent: #E8C998;
+  --focus-ring: #F2DAB2;
+}
+
+[data-theme="light"][data-accent="editorial-gold"] {
+  --brand-accent: #9E6830;
+  --focus-ring: #B77E45;
+}
+
