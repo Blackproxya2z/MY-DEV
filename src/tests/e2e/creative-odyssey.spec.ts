@@ -43,11 +43,19 @@ test.describe('Jahin Azmain — The Creative Odyssey (Full-Stack E2E Proof Suite
     await page.screenshot({
       path: 'C:/Users/SINISTER/.gemini/antigravity/brain/cd1ce552-56e1-4ea6-9476-6f80483aa2f7/preview-10k-01-hero.png',
     });
-    await page.getByTestId('interactive-scope-builder').scrollIntoViewIfNeeded();
+    await page.evaluate(() => {
+      document
+        .querySelector('[data-testid="interactive-scope-builder"]')
+        ?.scrollIntoView({ block: 'center', behavior: 'instant' });
+    });
     await page.screenshot({
       path: 'C:/Users/SINISTER/.gemini/antigravity/brain/cd1ce552-56e1-4ea6-9476-6f80483aa2f7/preview-10k-02-scope-builder.png',
     });
-    await page.locator('#chapter-worlds').scrollIntoViewIfNeeded();
+    await page.evaluate(() => {
+      document
+        .getElementById('chapter-worlds')
+        ?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
     await page.screenshot({
       path: 'C:/Users/SINISTER/.gemini/antigravity/brain/cd1ce552-56e1-4ea6-9476-6f80483aa2f7/preview-10k-03-worlds-built.png',
     });

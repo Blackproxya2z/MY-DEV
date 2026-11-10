@@ -5,6 +5,7 @@ import { getPublicSiteData } from '@/lib/db';
 import { buildRouteMetadata } from '@/lib/seo';
 import { formatWhatsAppUrl } from '@/lib/utils';
 import { DynamicLucideIcon } from '@/components/ui/LucideIcon';
+import { InteractiveScopeBuilder } from '@/components/story/InteractiveScopeBuilder';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,9 +51,18 @@ export default async function ServicesPage() {
             return (
               <article
                 key={service.id}
-                className="rounded-card border border-border bg-raised/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 hover:border-accent/70 transition-colors"
+                className="cinema-bento-card rounded-card border border-border bg-raised/90 p-7 sm:p-8 flex flex-col justify-between space-y-6 hover:border-accent/70 transition-colors"
               >
                 <div className="space-y-5">
+                  {service.cover_url ? (
+                    <div className="aspect-[16/9] rounded-xl overflow-hidden border border-border bg-canvas">
+                      <img
+                        src={service.cover_url}
+                        alt={service.cover_alt || service.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : null}
                   <div className="flex items-center justify-between gap-4">
                     <span className="px-3 py-1 rounded-md border border-border bg-canvas text-xs font-mono text-accent font-semibold">
                       {service.number_label} // {service.category}
@@ -135,6 +145,14 @@ export default async function ServicesPage() {
               </article>
             );
           })}
+        </div>
+
+        <div className="mt-16">
+          <InteractiveScopeBuilder
+            services={services}
+            ownerName={profile.full_name}
+            whatsappNormalized={profile.whatsapp_normalized}
+          />
         </div>
       </section>
     </div>

@@ -94,7 +94,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="relative cosmic-grid-backdrop overflow-x-clip"
+              className="relative cosmic-grid-backdrop scroll-mt-28 md:scroll-mt-32"
             >
               <CinematicScrollHero
                 chapterIdx={chapterIdx}
@@ -170,7 +170,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="py-20 md:py-28 bg-canvas"
+              className="py-20 md:py-28 bg-canvas scroll-mt-28 md:scroll-mt-32"
             >
               <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -279,7 +279,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="py-20 md:py-28 bg-raised/30"
+              className="py-20 md:py-28 bg-raised/30 scroll-mt-28 md:scroll-mt-32"
             >
               <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -424,7 +424,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="py-20 md:py-28 bg-canvas"
+              className="py-20 md:py-28 bg-canvas scroll-mt-28 md:scroll-mt-32"
             >
               <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -506,7 +506,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="py-20 md:py-28 bg-raised/30"
+              className="py-20 md:py-28 bg-raised/30 scroll-mt-28 md:scroll-mt-32"
             >
               <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div className="space-y-4 max-w-2xl">
@@ -587,7 +587,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="py-20 md:py-28 bg-canvas"
+              className="py-20 md:py-28 bg-canvas scroll-mt-28 md:scroll-mt-32"
             >
               <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -725,7 +725,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="py-20 md:py-28 bg-raised/30"
+              className="py-20 md:py-28 bg-raised/30 scroll-mt-28 md:scroll-mt-32"
             >
               <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -860,7 +860,7 @@ export function SectionRenderer({
               key={section.id}
               id={section.section_key}
               data-chapter-code={chapterIdx}
-              className="py-20 md:py-28 bg-canvas cosmic-grid-backdrop"
+              className="py-20 md:py-28 bg-canvas cosmic-grid-backdrop scroll-mt-28 md:scroll-mt-32"
             >
               <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -954,7 +954,7 @@ export function SectionRenderer({
             key={section.id}
             id={section.section_key}
             data-chapter-code={chapterIdx}
-            className="py-16 md:py-24 bg-canvas"
+            className="py-16 md:py-24 bg-canvas scroll-mt-28 md:scroll-mt-32"
           >
             <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
               <div className="space-y-3">

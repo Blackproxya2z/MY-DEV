@@ -186,7 +186,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'editorial-intro',
         chapter_code: '02 / 08',
         label: 'The Story Behind the Screen',
-        eyebrow: 'CHAPTER 01 — IDENTITY & PHILOSOPHY',
+        eyebrow: 'CHAPTER 02 // IDENTITY & PHILOSOPHY',
         heading: 'Every Great Idea Begins Somewhere.',
         subheading:
           'I design meaningful visual identities and build modern digital experiences that help individuals and businesses establish a stronger online presence.',
@@ -219,7 +219,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'services-grid',
         chapter_code: '03 / 08',
         label: 'The Disciplines',
-        eyebrow: 'CHAPTER 02 — CAPABILITIES & SERVICES',
+        eyebrow: 'CHAPTER 03 // CAPABILITIES & SERVICES',
         heading: 'One Creative Mind. Multiple Ways to Build.',
         subheading:
           'Six interconnected disciplines engineered to take a brand from initial visual spark to complete digital operation.',
@@ -247,7 +247,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'projects-gallery',
         chapter_code: '04 / 08',
         label: "Worlds I've Built",
-        eyebrow: 'CHAPTER 03 — SELECTED WORKS & CASE STUDIES',
+        eyebrow: 'CHAPTER 04 // SELECTED WORKS & CASE STUDIES',
         heading: 'Ideas Turned Into Experiences.',
         subheading:
           'Selected branding, web, social, and digital commerce case studies crafted with visual discipline and practical business clarity.',
@@ -276,7 +276,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'skills-grid',
         chapter_code: '05 / 08',
         label: 'The Craft',
-        eyebrow: 'CHAPTER 04 — SYSTEMS, TOOLS & DISCIPLINES',
+        eyebrow: 'CHAPTER 05 // SYSTEMS, TOOLS & DISCIPLINES',
         heading: 'Where Creative Thinking Meets Technical Execution.',
         subheading:
           'Structured capabilities across visual communication, modern web architecture, social platform optimization, and operational content support.',
@@ -299,7 +299,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'timeline',
         chapter_code: '06 / 08',
         label: 'The Journey',
-        eyebrow: 'CHAPTER 05 — EXPERIENCE & ACADEMIC PATH',
+        eyebrow: 'CHAPTER 06 // EXPERIENCE & ACADEMIC PATH',
         heading: 'The Path So Far.',
         subheading:
           'A transparent timeline of academic grounding in Computer Science & Engineering and hands-on client delivery across design and web.',
@@ -325,7 +325,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'journal-preview',
         chapter_code: '07 / 08',
         label: 'Field Notes & Trust',
-        eyebrow: 'CHAPTER 06 — JOURNAL & VERIFIED PERSPECTIVES',
+        eyebrow: 'CHAPTER 07 // JOURNAL & VERIFIED PERSPECTIVES',
         heading: 'Ideas Worth Sharing.',
         subheading:
           'Practical notes on visual identity systems, responsive web craft, and building credible digital business storefronts.',
@@ -354,7 +354,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'contact',
         chapter_code: '08 / 08',
         label: 'Epilogue — The Next Chapter Is Yours',
-        eyebrow: 'EPILOGUE — COLLABORATION & INQUIRIES',
+        eyebrow: 'CHAPTER 08 // COLLABORATION & INQUIRIES',
         heading: "Have a Project in Mind? Let's Create Something Great.",
         subheading:
           'Whether you need a distinctive brand identity, a modern responsive website, or complete business page optimization, let us bring your vision to life.',

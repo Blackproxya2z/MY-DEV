@@ -153,12 +153,12 @@ export function CinematicScrollHero({
     const checkCapabilities = () => {
       const isDesktop = window.innerWidth >= 1024;
       const motionAllowed = effectiveMotion !== 'off';
-      setIsDesktopScrubEnabled(isDesktop && motionAllowed && enable3D);
+      setIsDesktopScrubEnabled(isDesktop && motionAllowed && enable3D && !isPreviewMode);
     };
     checkCapabilities();
     window.addEventListener('resize', checkCapabilities, { passive: true });
     return () => window.removeEventListener('resize', checkCapabilities);
-  }, [effectiveMotion, enable3D]);
+  }, [effectiveMotion, enable3D, isPreviewMode]);
 
   // Scroll listener updating targetProgressRef
   useEffect(() => {
@@ -520,21 +520,22 @@ export function CinematicScrollHero({
   };
 
   return (
-    <div
-      ref={runwayRef}
-      className={
-        isDesktopScrubEnabled
-          ? 'relative min-h-[215svh] w-full'
-          : 'relative min-h-[calc(100svh-5rem)] w-full'
-      }
-    >
+    <div className="w-full">
       <div
+        ref={runwayRef}
         className={
           isDesktopScrubEnabled
-            ? 'sticky top-16 md:top-20 min-h-[calc(100svh-5rem)] flex flex-col justify-between py-8 lg:py-10 overflow-hidden'
-            : 'relative min-h-[calc(100svh-5rem)] flex flex-col justify-between py-12 md:py-20 overflow-hidden'
+            ? 'relative min-h-[185svh] w-full'
+            : 'relative min-h-[calc(100svh-7.6rem)] w-full'
         }
-        onPointerMove={(e) => {
+      >
+        <div
+          className={
+            isDesktopScrubEnabled
+              ? 'sticky top-[106px] md:top-[122px] min-h-[calc(100svh-7.6rem)] flex flex-col justify-between py-6 lg:py-8 overflow-hidden'
+              : 'relative min-h-[calc(100svh-7.6rem)] flex flex-col justify-between py-10 md:py-14 overflow-hidden'
+          }
+          onPointerMove={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
           const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
@@ -797,8 +798,6 @@ export function CinematicScrollHero({
               </div>
             </div>
           </div>
-
-          {children}
         </div>
 
         {/* Bottom Scroll-to-Explore Horizon Bar */}
@@ -821,7 +820,14 @@ export function CinematicScrollHero({
             </span>
           </div>
         </div>
+        </div>
       </div>
+
+      {children ? (
+        <div className="max-w-odyssey mx-auto px-4 sm:px-6 lg:px-8 pb-10 relative z-20">
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 }
