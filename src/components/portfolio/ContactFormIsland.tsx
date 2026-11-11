@@ -80,13 +80,13 @@ export function ContactFormIsland({
       aria-label="Project inquiry form"
     >
       {/* Hidden anti-spam honeypot field */}
-      <div className="sr-only" aria-hidden="true">
-        <label htmlFor="website_honeypot">Leave this field empty</label>
+      <div className="hidden sr-only" style={{ display: 'none' }} aria-hidden="true">
         <input
           id="website_honeypot"
           type="text"
           tabIndex={-1}
           autoComplete="off"
+          aria-label="Website URL"
           {...register('website_honeypot')}
         />
       </div>

@@ -116,9 +116,9 @@ export default async function ServiceDetailPage({
               <DynamicLucideIcon name={service.icon_name} className="w-5 h-5 text-highlight" />
             </div>
 
-            <ul className="space-y-3 pt-2">
+            <ul className="list-none m-0 p-0 space-y-3 pt-2">
               {service.deliverables_jsonb.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm text-fg">
+                <li key={item} className="list-none flex items-start gap-2.5 text-sm text-fg">
                   <CheckCircle2
                     className="w-4 h-4 text-accent shrink-0 mt-0.5"
                     aria-hidden="true"

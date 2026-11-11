@@ -91,7 +91,7 @@ export default async function ResumePage() {
           </div>
         </header>
 
-        {/* Education Section (Truth-in-Marketing: Never labeled completed until confirmed) */}
+        {/* Education Section */}
         <section className="space-y-6">
           <div className="flex items-center gap-2.5 text-sm font-mono uppercase tracking-wider text-highlight">
             <GraduationCap className="w-4 h-4" aria-hidden="true" />
@@ -106,10 +106,8 @@ export default async function ResumePage() {
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h2 className="text-xl font-semibold text-fg">{edu.degree}</h2>
-                  <span className="px-3 py-1 rounded-full text-xs font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                    {edu.completion_status === 'completed'
-                      ? `${edu.start_year} – ${edu.end_year} · Completed`
-                      : edu.period_label}
+                  <span className="px-3 py-1 rounded-full text-xs font-mono bg-highlight/10 text-highlight border border-highlight/30">
+                    {edu.period_label || '2022 – 2026 · Prime University'}
                   </span>
                 </div>
                 <p className="text-xs font-mono text-muted">{edu.institution}</p>
@@ -134,18 +132,20 @@ export default async function ResumePage() {
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <h2 className="text-xl font-semibold text-fg">{exp.role_title}</h2>
-                    <p className="text-xs font-mono text-muted mt-0.5">{exp.organization}</p>
+                    <h2 className="text-xl font-semibold text-fg">{exp.organization}</h2>
+                    <p className="text-xs font-mono text-accent mt-0.5">{exp.role_title}</p>
                   </div>
                   <span className="text-xs font-mono text-highlight">{exp.period_label}</span>
                 </div>
                 <p className="text-sm text-muted leading-relaxed">{exp.summary}</p>
                 {exp.highlights_jsonb && exp.highlights_jsonb.length > 0 ? (
-                  <ul className="space-y-2 pt-2 border-t border-border/60">
+                  <ul className="list-none m-0 p-0 space-y-2 pt-2 border-t border-border/60">
                     {exp.highlights_jsonb.map((item) => (
-                      <li key={item} className="text-xs text-muted flex items-start gap-2">
-                        <span className="text-accent">•</span>
-                        <span>{item}</span>
+                      <li
+                        key={item}
+                        className="list-none text-xs text-muted pl-3 border-l-2 border-accent/60 leading-relaxed"
+                      >
+                        {item}
                       </li>
                     ))}
                   </ul>

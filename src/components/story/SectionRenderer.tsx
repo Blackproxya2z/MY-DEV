@@ -199,9 +199,6 @@ export function SectionRenderer({
                       <blockquote className="text-base sm:text-lg font-medium text-fg leading-relaxed border-l-2 border-accent pl-4">
                         &ldquo;{profile.brand_statement}&rdquo;
                       </blockquote>
-                      <p className="text-xs font-mono text-muted">
-                        — {profile.full_name}, {profile.role_title}
-                      </p>
                     </div>
                   </div>
 
@@ -223,11 +220,11 @@ export function SectionRenderer({
                         <span className="text-xs font-mono text-accent">01 // VISUAL STORY</span>
                         <h3 className="text-base font-semibold text-fg">
                           {(section.content_jsonb?.pillar_1_title as string) ||
-                            'Brand Identity & Graphic Systems'}
+                            'Brand & Graphic Systems'}
                         </h3>
                         <p className="text-sm text-muted">
                           {(section.content_jsonb?.pillar_1_desc as string) ||
-                            'Logos, social media systems, covers, and presentations designed with editorial restraint and purpose.'}
+                            'Logos, social campaign templates, covers, and pitch decks built with clean typography and clear purpose.'}
                         </p>
                       </div>
                       <div className="p-5 rounded-2xl border border-border bg-raised/50 space-y-2">
@@ -236,11 +233,11 @@ export function SectionRenderer({
                         </span>
                         <h3 className="text-base font-semibold text-fg">
                           {(section.content_jsonb?.pillar_2_title as string) ||
-                            'Websites & Business Setup'}
+                            'Web & Business Setup'}
                         </h3>
                         <p className="text-sm text-muted">
                           {(section.content_jsonb?.pillar_2_desc as string) ||
-                            'Responsive websites, Shopify setups, optimized business pages, and LinkedIn authority profiles.'}
+                            'Fast portfolio and corporate websites, e-commerce setups, and fully configured Facebook & LinkedIn business profiles.'}
                         </p>
                       </div>
                     </div>
@@ -344,11 +341,11 @@ export function SectionRenderer({
                         </p>
 
                         {service.deliverables_jsonb && service.deliverables_jsonb.length > 0 ? (
-                          <ul className="space-y-2 pt-2 border-t border-border/60">
+                          <ul className="list-none m-0 p-0 space-y-2 pt-2 border-t border-border/60">
                             {service.deliverables_jsonb.slice(0, 4).map((item) => (
                               <li
                                 key={item}
-                                className="flex items-start gap-2 text-xs text-muted"
+                                className="list-none flex items-start gap-2 text-xs text-muted"
                               >
                                 <CheckCircle2
                                   className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5"
@@ -482,22 +479,30 @@ export function SectionRenderer({
             {
               key: 'graphic-design',
               code: '01 // VISUAL CRAFT',
-              title: 'Graphic Design & Branding',
+              title: 'Visual Identity & Editorial Systems',
+              summary:
+                'Vector identity systems, grid-based social templates, and narrative pitch decks built for instant brand recall.',
             },
             {
               key: 'web-development',
               code: '02 // WEB ARCHITECTURE',
-              title: 'Website Design & Development',
+              title: 'Frontend Engineering & Storefronts',
+              summary:
+                'Mobile-first interfaces, clean frontend code, and conversion-focused Shopify & business websites.',
             },
             {
               key: 'digital-setup',
               code: '03 // PLATFORM PRESENCE',
-              title: 'Digital Business & Social Setup',
+              title: 'Turnkey Social & Business Profiles',
+              summary:
+                'Turnkey Facebook Business & LinkedIn setups equipped with automated WhatsApp inquiry flows.',
             },
             {
               key: 'content-support',
               code: '04 // STRUCTURED OPERATIONS',
-              title: 'Data Entry & Content Support',
+              title: 'Catalogs, Documentation & Data',
+              summary:
+                'Organized product catalogs, technical documentation, and clean spreadsheet management.',
             },
           ];
 
@@ -532,31 +537,32 @@ export function SectionRenderer({
                     return (
                       <div
                         key={grp.key}
-                        className="rounded-card border border-border bg-raised/85 p-7 space-y-5"
+                        className="rounded-card border border-border bg-raised/85 p-7 space-y-5 flex flex-col justify-between"
                       >
-                        <div className="flex items-center justify-between border-b border-border/70 pb-4">
-                          <div>
-                            <span className="text-xs font-mono text-accent">{grp.code}</span>
-                            <h3 className="text-lg font-semibold text-fg mt-1">{grp.title}</h3>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between border-b border-border/70 pb-4">
+                            <div>
+                              <span className="text-xs font-mono text-accent">{grp.code}</span>
+                              <h3 className="text-lg font-semibold text-fg mt-1">{grp.title}</h3>
+                            </div>
+                            <Sparkles className="w-4 h-4 text-highlight shrink-0" aria-hidden="true" />
                           </div>
-                          <Sparkles className="w-4 h-4 text-highlight" aria-hidden="true" />
+
+                          <p className="text-sm text-muted leading-relaxed">
+                            {grp.summary}
+                          </p>
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="flex flex-wrap gap-2 pt-3 border-t border-border/50">
                           {groupSkills.map((skill) => (
                             <div
                               key={skill.id}
-                              className="p-4 rounded-xl border border-border/70 bg-canvas/70 space-y-1.5"
+                              className="px-3 py-2 rounded-xl border border-border/70 bg-canvas/80 flex items-center gap-2"
                             >
-                              <div className="flex items-center justify-between gap-2">
-                                <h4 className="text-sm font-semibold text-fg">{skill.name}</h4>
-                                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-raised border border-border text-muted">
-                                  {skill.tool_metaphor}
-                                </span>
-                              </div>
-                              <p className="text-xs text-muted leading-relaxed">
-                                {skill.description}
-                              </p>
+                              <span className="text-xs font-medium text-fg">{skill.name}</span>
+                              <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-raised border border-border text-highlight">
+                                {skill.tool_metaphor}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -636,24 +642,21 @@ export function SectionRenderer({
                             <span className="text-xs font-mono text-highlight">
                               {exp.period_label}
                             </span>
-                            {exp.is_current ? (
-                              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                                Active Practice
-                              </span>
-                            ) : null}
+                            <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                              {exp.organization}
+                            </span>
                           </div>
-                          <h3 className="text-lg font-semibold text-fg">{exp.role_title}</h3>
-                          <p className="text-xs font-mono text-muted">{exp.organization}</p>
+                          <h3 className="text-lg font-semibold text-fg">{exp.organization}</h3>
+                          <p className="text-xs font-mono text-accent">{exp.role_title}</p>
                           <p className="text-sm text-muted leading-relaxed">{exp.summary}</p>
                           {exp.highlights_jsonb && exp.highlights_jsonb.length > 0 ? (
-                            <ul className="space-y-1.5 pt-2">
+                            <ul className="list-none m-0 p-0 space-y-2 pt-2">
                               {exp.highlights_jsonb.map((hl) => (
                                 <li
                                   key={hl}
-                                  className="text-xs text-muted flex items-start gap-2"
+                                  className="list-none text-xs text-muted pl-3 border-l-2 border-accent/60 leading-relaxed"
                                 >
-                                  <span className="text-accent mt-0.5">•</span>
-                                  <span>{hl}</span>
+                                  {hl}
                                 </li>
                               ))}
                             </ul>
@@ -663,7 +666,7 @@ export function SectionRenderer({
                     </div>
                   </div>
 
-                  {/* Academic Foundation Column (Truth-in-Marketing: Never labeled completed until confirmed) */}
+                  {/* Academic Foundation Column */}
                   <div className="space-y-6">
                     <div className="flex items-center gap-2.5 text-sm font-mono uppercase tracking-wider text-highlight">
                       <GraduationCap className="w-4 h-4" aria-hidden="true" />
@@ -679,14 +682,7 @@ export function SectionRenderer({
                           <span className="absolute -left-[31px] top-7 w-3.5 h-3.5 rounded-full bg-highlight border-2 border-canvas" />
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <span className="text-xs font-mono text-highlight">
-                              {edu.period_label}
-                            </span>
-                            <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                              {edu.completion_status === 'completed'
-                                ? 'Verified Completed'
-                                : edu.completion_status === 'in_progress'
-                                ? 'In Progress'
-                                : '2022–2026 · Status Pending Confirmation'}
+                              {edu.period_label || '2022 – 2026 · Prime University'}
                             </span>
                           </div>
                           <h3 className="text-lg font-semibold text-fg">{edu.degree}</h3>

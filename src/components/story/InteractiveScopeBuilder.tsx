@@ -96,12 +96,14 @@ export function InteractiveScopeBuilder({
               >
                 <div className="space-y-1 min-w-0">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-highlight block">
-                    {srv.number_label} // {srv.category}
+                    {srv.number_label}
                   </span>
                   <strong className="text-sm font-semibold text-fg block truncate">
                     {srv.title}
                   </strong>
-                  <span className="text-xs text-muted line-clamp-1 block">{srv.teaser}</span>
+                  <span className="text-xs font-mono text-muted truncate block">
+                    {srv.category}
+                  </span>
                 </div>
 
                 <span

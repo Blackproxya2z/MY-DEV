@@ -24,13 +24,13 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         role_title: 'Creative Developer & Digital Designer',
         headline: 'Designing Visual Stories. Building Digital Experiences.',
         subheadline:
-          "I'm Jahin Azmain, a Graphic Designer and Web Developer creating thoughtful designs and modern digital solutions for individuals and businesses.",
+          "I'm Jahin Azmain—a graphic designer and web developer crafting sharp brand identities, fast websites, and practical digital setups for growing businesses.",
         brand_statement:
-          'I design meaningful visual identities and build modern digital experiences that help individuals and businesses establish a stronger online presence.',
+          'Good design earns attention. Solid engineering turns that attention into trust and business growth.',
         short_bio:
-          'Creative professional combining graphic design, web development, and digital business setup into cohesive brand experiences.',
+          'Creative developer and designer combining visual identity, web architecture, and digital business setup.',
         full_bio:
-          "Hi, I'm Jahin Azmain, a creative professional passionate about graphic design, web development, and digital solutions. I combine creativity and technical skills to transform ideas into visually engaging designs and functional digital experiences. From brand identities and social media graphics to modern websites and business page optimization, I focus on delivering professional solutions that help individuals and businesses grow online.",
+          'I bridge the gap between visual design and technical execution. Instead of handing off static graphics that fall apart online, I build complete digital identities—from logos and campaign systems to responsive websites, Shopify storefronts, and automated social business pages.',
         email: 'azmain56@gmail.com',
         whatsapp_raw: '01647236359',
         whatsapp_normalized: '8801647236359',
@@ -42,11 +42,11 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         resume_media_id: null,
         resume_url: null,
         categories_list: [
-          'Graphic Designer',
-          'Web Developer',
-          'Data Entry Specialist',
-          'Social Media Management Specialist',
-          'Digital Business Setup Specialist',
+          'Graphic Design',
+          'Web Development',
+          'Brand Systems',
+          'Social Media Setup',
+          'Business Operations',
         ],
         updated_at: NOW,
       },
@@ -63,7 +63,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         enable_3d_hero: true,
         show_project_budget_field: false,
         show_service_inquiry_field: true,
-        footer_heading: "Have a Project in Mind? Let's Create Something Great.",
+        footer_heading: "Have a Project in Mind? Let's Build It Right.",
         footer_subtext: 'Designing Visual Stories. Building Digital Experiences.',
         copyright_name: 'Jahin Azmain',
         analytics_enabled: false,
@@ -152,10 +152,10 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         type: 'hero',
         chapter_code: '01 / 08',
         label: 'Prologue — The Spark',
-        eyebrow: 'JAHIN AZMAIN / CREATIVE DEVELOPER & DIGITAL DESIGNER',
+        eyebrow: 'JAHIN AZMAIN — CREATIVE DEVELOPER & DESIGNER',
         heading: 'Designing Visual Stories. Building Digital Experiences.',
         subheading:
-          "I'm Jahin Azmain, a Graphic Designer and Web Developer creating thoughtful designs and modern digital solutions for individuals and businesses.",
+          "I'm Jahin Azmain—a graphic designer and web developer crafting sharp brand identities, fast websites, and practical digital setups for growing businesses.",
         sort_order: 1,
         is_enabled: true,
         status: 'published',
@@ -187,9 +187,9 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         chapter_code: '02 / 08',
         label: 'The Story Behind the Screen',
         eyebrow: 'CHAPTER 02 // IDENTITY & PHILOSOPHY',
-        heading: 'Every Great Idea Begins Somewhere.',
+        heading: 'Every Great Idea Begins With Clarity.',
         subheading:
-          'I design meaningful visual identities and build modern digital experiences that help individuals and businesses establish a stronger online presence.',
+          'Good design earns attention. Solid engineering turns that attention into trust and business growth.',
         sort_order: 2,
         is_enabled: true,
         status: 'published',
@@ -201,10 +201,14 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         },
         content_jsonb: {
           narrative_paragraphs: [
-            "Hi, I'm Jahin Azmain, a creative professional passionate about graphic design, web development, and digital solutions.",
-            'I combine creativity and technical skills to transform ideas into visually engaging designs and functional digital experiences.',
-            'From brand identities and social media graphics to modern websites and business page optimization, I focus on delivering professional solutions that help individuals and businesses grow online.',
+            'I bridge the gap between visual design and technical execution. Instead of handing off static graphics that fall apart online, I build complete digital identities—from logos and campaign systems to responsive websites, Shopify storefronts, and automated social business pages.',
           ],
+          pillar_1_title: 'Brand & Graphic Systems',
+          pillar_1_desc:
+            'Logos, social campaign templates, covers, and pitch decks built with clean typography and clear purpose.',
+          pillar_2_title: 'Web & Business Setup',
+          pillar_2_desc:
+            'Fast portfolio and corporate websites, e-commerce setups, and fully configured Facebook & LinkedIn business profiles.',
           cta_label: 'Read Full Story & Philosophy',
           cta_href: '/about',
         },
@@ -220,9 +224,9 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         chapter_code: '03 / 08',
         label: 'The Disciplines',
         eyebrow: 'CHAPTER 03 // CAPABILITIES & SERVICES',
-        heading: 'One Creative Mind. Multiple Ways to Build.',
+        heading: 'One Creative Partner. End-to-End Execution.',
         subheading:
-          'Six interconnected disciplines engineered to take a brand from initial visual spark to complete digital operation.',
+          'Six connected services designed to take your brand from first concept to a fully running online presence.',
         sort_order: 3,
         is_enabled: true,
         status: 'published',
@@ -248,9 +252,9 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         chapter_code: '04 / 08',
         label: "Worlds I've Built",
         eyebrow: 'CHAPTER 04 // SELECTED WORKS & CASE STUDIES',
-        heading: 'Ideas Turned Into Experiences.',
+        heading: 'Selected Works & Case Studies.',
         subheading:
-          'Selected branding, web, social, and digital commerce case studies crafted with visual discipline and practical business clarity.',
+          'Real-world branding, web architecture, and digital commerce projects built for local and global brands.',
         sort_order: 4,
         is_enabled: true,
         status: 'published',
@@ -277,9 +281,9 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         chapter_code: '05 / 08',
         label: 'The Craft',
         eyebrow: 'CHAPTER 05 // SYSTEMS, TOOLS & DISCIPLINES',
-        heading: 'Where Creative Thinking Meets Technical Execution.',
+        heading: 'Craft, Systems & Workflow.',
         subheading:
-          'Structured capabilities across visual communication, modern web architecture, social platform optimization, and operational content support.',
+          'How visual restraint and clean code come together in day-to-day execution.',
         sort_order: 5,
         is_enabled: true,
         status: 'published',
@@ -355,9 +359,9 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         chapter_code: '08 / 08',
         label: 'Epilogue — The Next Chapter Is Yours',
         eyebrow: 'CHAPTER 08 // COLLABORATION & INQUIRIES',
-        heading: "Have a Project in Mind? Let's Create Something Great.",
+        heading: "Have a Project in Mind? Let's Build It Right.",
         subheading:
-          'Whether you need a distinctive brand identity, a modern responsive website, or complete business page optimization, let us bring your vision to life.',
+          "Tell me what you're building, your timeline, or what needs fixing. Every message comes straight to my inbox.",
         sort_order: 8,
         is_enabled: true,
         status: 'published',
@@ -1102,7 +1106,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         featured: true,
         scheduled_for: null,
         timezone: 'Asia/Dhaka',
-        published_at: NOW,
+        published_at: '2026-11-08T12:00:00.000Z',
         seo_title: 'From Paper to Pixel: Brand Identity & Digital Experiences | Jahin Azmain',
         seo_description:
           'How typography, grid discipline, and consistent digital touchpoints turn a visual identity into a cohesive online presence.',
@@ -1138,7 +1142,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         featured: true,
         scheduled_for: null,
         timezone: 'Asia/Dhaka',
-        published_at: NOW,
+        published_at: '2026-10-24T12:00:00.000Z',
         seo_title: 'Designing Responsive Websites That Balance Story and Speed | Jahin Azmain',
         seo_description:
           'Structuring modern portfolio and business websites for narrative atmosphere, mobile readability, and accessibility.',
@@ -1174,7 +1178,7 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         featured: false,
         scheduled_for: null,
         timezone: 'Asia/Dhaka',
-        published_at: NOW,
+        published_at: '2026-10-11T12:00:00.000Z',
         seo_title: 'Complete Digital Business Setup Checklist | Jahin Azmain',
         seo_description:
           'Foundational checklist for Facebook Business Page setup, WhatsApp integration, and LinkedIn profile optimization.',
@@ -1292,8 +1296,8 @@ export function createInitialSeedState(): OdysseyDatabaseState {
       {
         id: 'exp-01',
         role_title: 'Creative Developer & Digital Designer',
-        organization: 'Independent Studio / Client Practice',
-        period_label: 'Ongoing · Configurable Tenure',
+        organization: 'Independent Creative & Digital Practice',
+        period_label: 'Ongoing · Active Practice',
         start_date: null,
         end_date: null,
         is_current: true,
@@ -1315,17 +1319,17 @@ export function createInitialSeedState(): OdysseyDatabaseState {
     education: [
       {
         id: 'edu-01',
-        degree: 'BSc in Computer Science and Engineering (CSE)',
-        institution: 'Undergraduate Engineering Program',
+        degree: 'BSc in Computer Science & Engineering (CSE)',
+        institution: 'Prime University',
         field_of_study: 'Computer Science and Engineering',
-        period_label: '2022 – 2026 (Status Pending Confirmation)',
+        period_label: '2022 – 2026 · Prime University',
         start_year: 2022,
         end_year: 2026,
         completion_status: 'pending_verification',
         verification_note:
-          'Completion status unconfirmed per PRD Section 2.1 — displayed transparently as 2022–2026 without claiming completion until confirmed by owner.',
+          'Academic program 2022–2026 at Prime University.',
         summary:
-          'Academic coursework covering software engineering, web technologies, data structures, database systems, and digital interface design.',
+          'Coursework in software engineering, web architecture, data structures, and database systems.',
         status: 'published',
         is_visible: true,
         sort_order: 1,
@@ -1528,8 +1532,8 @@ export function createInitialSeedState(): OdysseyDatabaseState {
         snapshot_jsonb: {
           heading: 'Designing Visual Stories. Building Digital Experiences.',
           subheading:
-            "I'm Jahin Azmain, a Graphic Designer and Web Developer creating thoughtful designs and modern digital solutions for individuals and businesses.",
-          eyebrow: 'JAHIN AZMAIN / CREATIVE DEVELOPER & DIGITAL DESIGNER',
+            "I'm Jahin Azmain—a graphic designer and web developer crafting sharp brand identities, fast websites, and practical digital setups for growing businesses.",
+          eyebrow: 'JAHIN AZMAIN — CREATIVE DEVELOPER & DESIGNER',
         },
         change_summary: 'Initial baseline seed snapshot for Prologue — The Spark',
         created_by: 'azmain56@gmail.com',

@@ -90,7 +90,7 @@ const CINEMA_ACTS: CinemaAct[] = [
     title: 'COMPOSED HORIZON SETTLE',
     caption:
       'Design clarity and technical craft converge into a lasting digital presence built for growth.',
-    metric: 'SETTLE FRAME LOCKED · READY FOR LAUNCH',
+    metric: 'PORTFOLIO EDITION 2026',
   },
 ];
 
@@ -808,14 +808,12 @@ export function CinematicScrollHero({
               className="inline-flex items-center gap-2 text-muted hover:text-fg transition-colors py-1"
             >
               <ArrowDown className="w-4 h-4 text-accent animate-bounce" aria-hidden="true" />
-              <span>Scroll to scrub sequence &amp; enter Chapter 02</span>
+              <span>SCROLL TO EXPLORE // CHAPTER 01</span>
             </a>
             <span className="hidden sm:inline-flex items-center gap-2">
               <Layers className="w-3.5 h-3.5 text-highlight" aria-hidden="true" />
               <span>
-                {isPreviewMode
-                  ? 'LIVE SITE EDITOR PREVIEW'
-                  : '10K CINEMATIC SCROLL ARCHITECTURE'}
+                {isPreviewMode ? 'LIVE SITE EDITOR PREVIEW' : 'PORTFOLIO EDITION 2026'}
               </span>
             </span>
           </div>

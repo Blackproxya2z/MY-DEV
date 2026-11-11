@@ -44,13 +44,12 @@ export default async function ContactPage({
               </span>
 
               <h1 className="chapter-heading font-display font-semibold text-fg">
-                Have a Project in Mind? Let&apos;s Create Something Great.
+                Have a Project in Mind? Let&apos;s Build It Right.
               </h1>
 
               <p className="text-base text-muted leading-relaxed">
-                Whether you need a cohesive visual identity, a modern responsive website, or
-                complete business page optimization, send a direct message or connect via
-                WhatsApp.
+                Tell me what you&apos;re building, your timeline, or what needs fixing. Every
+                message comes straight to my inbox.
               </p>
             </div>
 

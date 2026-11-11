@@ -30,12 +30,12 @@ export default async function ServicesPage() {
         </span>
 
         <h1 className="chapter-heading font-display font-semibold text-fg max-w-3xl">
-          One Creative Mind. Multiple Ways to Build.
+          One Creative Partner. End-to-End Execution.
         </h1>
 
         <p className="text-base sm:text-lg text-muted max-w-2xl leading-relaxed">
-          From initial brand identity and social media visuals to responsive website engineering,
-          business page setup, LinkedIn optimization, and structured content support.
+          Six connected services designed to take your brand from first concept to a fully running
+          online presence.
         </p>
       </section>
 
@@ -108,9 +108,12 @@ export default async function ServicesPage() {
                       <p className="text-xs font-mono uppercase tracking-wider text-muted">
                         Key Deliverables
                       </p>
-                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <ul className="list-none m-0 p-0 grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {service.deliverables_jsonb.map((del) => (
-                          <li key={del} className="flex items-start gap-2 text-xs text-muted">
+                          <li
+                            key={del}
+                            className="list-none flex items-start gap-2 text-xs text-muted"
+                          >
                             <CheckCircle2
                               className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5"
                               aria-hidden="true"

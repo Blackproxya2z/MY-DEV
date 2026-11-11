@@ -35,7 +35,7 @@ export default async function AboutPage() {
             </span>
 
             <h1 className="chapter-heading font-display font-semibold text-fg">
-              Every Great Idea Begins Somewhere.
+              Every Great Idea Begins With Clarity.
             </h1>
 
             <p className="text-lg text-fg font-medium leading-relaxed border-l-2 border-accent pl-4">
@@ -136,14 +136,17 @@ export default async function AboutPage() {
                   <span>{exp.period_label}</span>
                   <span>{exp.organization}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-fg">{exp.role_title}</h3>
+                <h3 className="text-xl font-semibold text-fg">{exp.organization}</h3>
+                <p className="text-xs font-mono text-accent">{exp.role_title}</p>
                 <p className="text-sm text-muted leading-relaxed">{exp.summary}</p>
                 {exp.highlights_jsonb && exp.highlights_jsonb.length > 0 ? (
-                  <ul className="space-y-2 pt-2 border-t border-border/60">
+                  <ul className="list-none m-0 p-0 space-y-2 pt-2 border-t border-border/60">
                     {exp.highlights_jsonb.map((item) => (
-                      <li key={item} className="text-xs text-muted flex items-start gap-2">
-                        <span className="text-accent">•</span>
-                        <span>{item}</span>
+                      <li
+                        key={item}
+                        className="list-none text-xs text-muted pl-3 border-l-2 border-accent/60 leading-relaxed"
+                      >
+                        {item}
                       </li>
                     ))}
                   </ul>
@@ -163,11 +166,8 @@ export default async function AboutPage() {
                 className="rounded-card border border-border bg-raised/90 p-7 space-y-4"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-                  <span className="text-highlight">{edu.period_label}</span>
-                  <span className="px-2.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                    {edu.completion_status === 'completed'
-                      ? 'Verified Completed'
-                      : '2022–2026 · Status Pending Confirmation'}
+                  <span className="text-highlight">
+                    {edu.period_label || '2022 – 2026 · Prime University'}
                   </span>
                 </div>
                 <h3 className="text-xl font-semibold text-fg">{edu.degree}</h3>

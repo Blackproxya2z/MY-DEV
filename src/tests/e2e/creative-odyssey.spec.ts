@@ -78,10 +78,10 @@ test.describe('Jahin Azmain — The Creative Odyssey (Full-Stack E2E Proof Suite
     await page.goto('/services/graphic-design-branding');
     await expect(page.locator('h1')).toContainText('Graphic Design & Branding');
 
-    // Verify Resume route & Truth-in-Marketing Education status
+    // Verify Resume route & Academic Foundation at Prime University
     await page.goto('/resume');
     await expect(page.locator('h1')).toContainText('Jahin Azmain');
-    await expect(page.getByText(/Status Pending Confirmation/i).first()).toBeVisible();
+    await expect(page.getByText(/Prime University/i).first()).toBeVisible();
 
     // Verify Custom 404 route
     await page.goto('/non-existent-odyssey-route-404');
